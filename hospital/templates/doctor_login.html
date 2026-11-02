@@ -1,0 +1,685 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Doctor Login - Smart Hospital Queue</title>
+
+    <!-- Google Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+
+    <link rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+          rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+
+        body {
+
+            font-family: "Inter", Arial, sans-serif;
+
+            background: #f5f8f8;
+
+            min-height: 100vh;
+
+            display: flex;
+
+            justify-content: center;
+
+            align-items: center;
+
+            color: #092f35;
+
+            padding: 20px;
+        }
+
+
+        /* =========================
+           LOGIN CONTAINER
+        ========================= */
+
+        .login-container {
+
+            width: 100%;
+
+            max-width: 570px;
+
+            background: white;
+
+            border-radius: 24px;
+
+            overflow: hidden;
+
+            box-shadow:
+                0 15px 35px rgba(0, 70, 75, 0.08);
+        }
+
+
+        /* =========================
+           HEADER
+        ========================= */
+
+        .header {
+
+            height: 93px;
+
+            background: #096b6f;
+
+            display: flex;
+
+            align-items: center;
+
+            padding: 0 33px;
+        }
+
+
+        .logo-box {
+
+            width: 39px;
+
+            height: 39px;
+
+            background: rgba(255,255,255,0.15);
+
+            border-radius: 10px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            color: white;
+
+            font-size: 20px;
+        }
+
+
+        .logo-text {
+
+            margin-left: 15px;
+
+            color: white;
+
+            font-size: 21px;
+
+            font-weight: 700;
+        }
+
+
+        /* =========================
+           LOGIN CONTENT
+        ========================= */
+
+        .login-content {
+
+            padding: 43px 39px 38px;
+        }
+
+
+        /* =========================
+           TITLE
+        ========================= */
+
+        .login-heading {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 18px;
+
+            margin-bottom: 36px;
+        }
+
+
+        .doctor-icon {
+
+            width: 56px;
+
+            height: 56px;
+
+            background: #e8f5f5;
+
+            border-radius: 50%;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            font-size: 26px;
+
+            color: #6351b5;
+
+            flex-shrink: 0;
+        }
+
+
+        .heading-text h1 {
+
+            font-size: 29px;
+
+            font-weight: 800;
+
+            color: #092f35;
+
+            margin-bottom: 8px;
+        }
+
+
+        .heading-text p {
+
+            font-size: 18px;
+
+            color: #668083;
+        }
+
+
+        /* =========================
+           FORM
+        ========================= */
+
+        .form-group {
+
+            margin-bottom: 27px;
+        }
+
+
+        .form-group label {
+
+            display: block;
+
+            font-size: 17px;
+
+            font-weight: 600;
+
+            margin-bottom: 10px;
+
+            color: #092f35;
+        }
+
+
+        .input-wrapper {
+
+            position: relative;
+        }
+
+
+        .input-icon {
+
+            position: absolute;
+
+            left: 22px;
+
+            top: 50%;
+
+            transform: translateY(-50%);
+
+            font-size: 18px;
+
+            color: #55428d;
+
+            pointer-events: none;
+        }
+
+
+        .form-input {
+
+            width: 100%;
+
+            height: 60px;
+
+            border: 1px solid #d4dfdf;
+
+            border-radius: 13px;
+
+            background: #fbfdfd;
+
+            padding: 0 20px 0 54px;
+
+            font-family: "Inter", Arial, sans-serif;
+
+            font-size: 17px;
+
+            color: #173d42;
+
+            outline: none;
+
+            transition: 0.2s;
+        }
+
+
+        .form-input:focus {
+
+            border-color: #08777a;
+
+            box-shadow:
+                0 0 0 4px rgba(8,119,122,0.12);
+        }
+
+
+        .form-input::placeholder {
+
+            color: #9baaaa;
+        }
+
+
+        /* =========================
+           ERROR MESSAGE
+        ========================= */
+
+        .error-message {
+
+            background: #fff3f3;
+
+            border: 1px solid #f0cccc;
+
+            color: #a33a3a;
+
+            padding: 12px;
+
+            border-radius: 10px;
+
+            margin-bottom: 20px;
+
+            font-size: 14px;
+
+            text-align: center;
+        }
+
+
+        /* =========================
+           BUTTONS
+        ========================= */
+
+        .button-row {
+
+            display: grid;
+
+            grid-template-columns: 1fr 1fr;
+
+            gap: 15px;
+
+            margin-top: 8px;
+        }
+
+
+        .btn {
+
+            height: 62px;
+
+            border-radius: 13px;
+
+            font-family: "Inter", Arial, sans-serif;
+
+            font-size: 17px;
+
+            font-weight: 800;
+
+            cursor: pointer;
+
+            transition: 0.2s;
+
+            text-decoration: none;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+        }
+
+
+        /* BACK BUTTON */
+
+        .back-btn {
+
+            background: white;
+
+            border: 1px solid #d3dfdf;
+
+            color: #07585b;
+        }
+
+
+        .back-btn:hover {
+
+            background: #f3f8f8;
+        }
+
+
+        /* LOGIN BUTTON */
+
+        .login-btn {
+
+            background: #096b6f;
+
+            border: 1px solid #096b6f;
+
+            color: white;
+        }
+
+
+        .login-btn:hover {
+
+            background: #07585b;
+        }
+
+
+        /* =========================
+           SECURITY MESSAGE
+        ========================= */
+
+        .security-message {
+
+            margin-top: 29px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            gap: 10px;
+
+            color: #718487;
+
+            font-size: 14px;
+
+            text-align: center;
+        }
+
+
+        .security-message i {
+
+            color: #b78328;
+
+            font-size: 16px;
+        }
+
+
+        /* =========================
+           MOBILE
+        ========================= */
+
+        @media (max-width: 650px) {
+
+            .login-content {
+
+                padding: 35px 25px;
+            }
+
+            .header {
+
+                padding: 0 22px;
+            }
+
+            .heading-text h1 {
+
+                font-size: 25px;
+            }
+
+            .heading-text p {
+
+                font-size: 15px;
+            }
+
+        }
+
+
+        @media (max-width: 450px) {
+
+            .button-row {
+
+                grid-template-columns: 1fr;
+            }
+
+            .login-heading {
+
+                gap: 12px;
+            }
+
+            .doctor-icon {
+
+                width: 48px;
+
+                height: 48px;
+            }
+
+            .security-message {
+
+                font-size: 13px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<div class="login-container">
+
+
+    <!-- =========================
+         HEADER
+    ========================= -->
+
+    <div class="header">
+
+        <div class="logo-box">
+
+            <i class="fa-solid fa-staff-snake"></i>
+
+        </div>
+
+
+        <div class="logo-text">
+
+            Smart hospital queue
+
+        </div>
+
+    </div>
+
+
+    <!-- =========================
+         LOGIN CONTENT
+    ========================= -->
+
+    <div class="login-content">
+
+
+        <!-- TITLE -->
+
+        <div class="login-heading">
+
+
+            <div class="doctor-icon">
+
+                <i class="fa-solid fa-stethoscope"></i>
+
+            </div>
+
+
+            <div class="heading-text">
+
+                <h1>
+                    Doctor login
+                </h1>
+
+                <p>
+                    Sign in to manage your patient queue
+                </p>
+
+            </div>
+
+
+        </div>
+
+
+        <!-- =========================
+             LOGIN FORM
+        ========================= -->
+
+        <form method="POST"
+              action="{% url 'doctor_login' %}">
+
+            {% csrf_token %}
+
+
+            <!-- SHOW ERROR -->
+
+            {% if error %}
+
+            <div class="error-message">
+
+                {{ error }}
+
+            </div>
+
+            {% endif %}
+
+
+            <!-- DOCTOR NAME -->
+
+            <div class="form-group">
+
+                <label for="doctor_name">
+
+                    Doctor name
+
+                </label>
+
+
+                <div class="input-wrapper">
+
+
+                    <i class="fa-solid fa-user input-icon"></i>
+
+
+                    <input
+                        type="text"
+                        id="doctor_name"
+                        name="doctor_name"
+                        class="form-input"
+                        placeholder="Enter doctor name"
+                        autocomplete="name"
+                        required
+                    >
+
+
+                </div>
+
+            </div>
+
+
+            <!-- PASSWORD -->
+
+            <div class="form-group">
+
+                <label for="password">
+
+                    Password
+
+                </label>
+
+
+                <div class="input-wrapper">
+
+
+                    <i class="fa-solid fa-lock input-icon"></i>
+
+
+                    <input
+                        type="password"
+                        id="password"
+                        name="password"
+                        class="form-input"
+                        placeholder="Enter password"
+                        autocomplete="current-password"
+                        required
+                    >
+
+
+                </div>
+
+            </div>
+
+
+            <!-- BUTTONS -->
+
+            <div class="button-row">
+
+
+                <a href="/"
+                   class="btn back-btn">
+
+                    Back
+
+                </a>
+
+
+                <button
+                    type="submit"
+                    class="btn login-btn">
+
+                    Log in
+
+                </button>
+
+
+            </div>
+
+
+        </form>
+
+
+        <!-- SECURITY -->
+
+        <div class="security-message">
+
+            <i class="fa-solid fa-lock"></i>
+
+            <span>
+
+                Your information is kept private and secure
+
+            </span>
+
+        </div>
+
+
+    </div>
+
+
+</div>
+
+
+</body>
+
+</html>

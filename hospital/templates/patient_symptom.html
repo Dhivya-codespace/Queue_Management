@@ -1,0 +1,347 @@
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Patient Symptoms | CareQueue</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background: #587473;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 30px 16px;
+            color: #075e5e;
+        }
+
+        .symptom-card {
+            width: 100%;
+            max-width: 540px;
+            background: #ffffff;
+            padding: 30px 32px;
+            border-radius: 12px;
+            box-shadow: 0 18px 45px rgba(0, 0, 0, 0.16);
+            position: relative;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 18px;
+            right: 20px;
+            color: #777;
+            text-decoration: none;
+            font-size: 23px;
+            line-height: 1;
+        }
+
+        .close-btn:hover {
+            color: #075e5e;
+        }
+
+        .heading {
+            font-size: 21px;
+            font-weight: 700;
+            margin-bottom: 7px;
+            color: #075e5e;
+        }
+
+        .subtitle {
+            color: #718080;
+            font-size: 11px;
+            margin-bottom: 24px;
+            line-height: 1.5;
+        }
+
+        .patient-badge {
+            background: #e7f0fa;
+            color: #075e5e;
+            border-radius: 6px;
+            padding: 11px 12px;
+            font-size: 12px;
+            margin-bottom: 20px;
+            border: 1px solid #dce8e8;
+        }
+
+        .patient-badge strong {
+            font-weight: 700;
+        }
+
+        .field-label {
+            display: block;
+            font-size: 11px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: #315f5e;
+        }
+
+        textarea {
+            width: 100%;
+            min-height: 145px;
+            resize: vertical;
+            border: 2px solid #dce8e8;
+            border-radius: 7px;
+            padding: 13px;
+            font-size: 13px;
+            line-height: 1.6;
+            color: #193b3b;
+            background: #ffffff;
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        textarea:focus,
+        input:focus {
+            border-color: #087071;
+            box-shadow: 0 0 0 3px rgba(8, 112, 113, 0.09);
+        }
+
+        textarea::placeholder {
+            color: #8b9999;
+        }
+
+        .hint {
+            font-size: 10px;
+            color: #718080;
+            margin-top: 7px;
+            line-height: 1.5;
+        }
+
+        .primary-btn {
+            width: 100%;
+            border: none;
+            background: #086263;
+            color: #ffffff;
+            padding: 13px 16px;
+            border-radius: 6px;
+            margin-top: 22px;
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.2s;
+        }
+
+        .primary-btn:hover {
+            background: #064f50;
+            transform: translateY(-1px);
+        }
+
+        .error-message {
+            background: #fff0f0;
+            color: #a32d2d;
+            border: 1px solid #f0cccc;
+            border-radius: 6px;
+            padding: 11px;
+            font-size: 12px;
+            margin-bottom: 16px;
+        }
+
+        .result-card {
+            margin-top: 24px;
+            padding: 17px;
+            background: #f3f8f8;
+            border: 1px solid #d9e8e7;
+            border-radius: 8px;
+        }
+
+        .result-title {
+            font-size: 15px;
+            color: #075e5e;
+            margin-bottom: 14px;
+        }
+
+        .result-label {
+            font-size: 10px;
+            color: #718080;
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+            margin-bottom: 5px;
+        }
+
+        .result-value {
+            font-size: 13px;
+            font-weight: 700;
+            color: #075e5e;
+            line-height: 1.5;
+            overflow-wrap: anywhere;
+        }
+
+        .result-description {
+            font-size: 12px;
+            color: #526868;
+            line-height: 1.6;
+            margin-top: 8px;
+        }
+
+        .result-section {
+            margin-bottom: 15px;
+        }
+
+        .warning {
+            background: #fff4e5;
+            border: 1px solid #f0d6a9;
+            color: #79521c;
+            border-radius: 6px;
+            padding: 12px;
+            font-size: 12px;
+            line-height: 1.6;
+            margin-top: 14px;
+        }
+
+        .secondary-btn {
+            display: block;
+            width: 100%;
+            text-align: center;
+            text-decoration: none;
+            color: #075e5e;
+            background: #e7f0fa;
+            border: 1px solid #d5e5e8;
+            padding: 12px;
+            border-radius: 6px;
+            margin-top: 10px;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .secondary-btn:hover {
+            background: #dcebed;
+        }
+
+        .footer-text {
+            text-align: center;
+            font-size: 10px;
+            color: #8b9999;
+            margin-top: 20px;
+            line-height: 1.5;
+        }
+
+        @media (max-width: 480px) {
+            .symptom-card {
+                padding: 26px 20px;
+            }
+
+            .heading {
+                font-size: 20px;
+            }
+
+            textarea {
+                min-height: 130px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <main class="symptom-card">
+
+        <a href="{% url 'patient_login' %}"
+           class="close-btn"
+           aria-label="Close">&times;</a>
+
+        <h1 class="heading">Patient Symptoms</h1>
+
+        <p class="subtitle">
+            Tell us how you are feeling so we can suggest the next step.
+        </p>
+
+        <div class="patient-badge">
+            Patient Name:
+            <strong>{{ patient_name|default:"Patient" }}</strong>
+        </div>
+
+        {% if error %}
+            <div class="error-message">{{ error }}</div>
+        {% endif %}
+
+        <form method="POST" action="{% url 'patient_symptom' %}">
+            {% csrf_token %}
+
+            <label class="field-label" for="symptoms">
+                Describe Your Symptoms *
+            </label>
+
+            <textarea
+                id="symptoms"
+                name="symptoms"
+                placeholder="Example: I have a stomach ache and have been vomiting since last night..."
+                required
+            >{{ symptoms|default:"" }}</textarea>
+
+            <p class="hint">
+                Include when your symptoms started and how you feel.
+                This information helps with the recommendation.
+            </p>
+
+            <button type="submit" class="primary-btn">
+                Analyze My Symptoms
+            </button>
+        </form>
+
+        {% if show_recommendation %}
+            <section class="result-card">
+
+                <h2 class="result-title">
+                    Symptom Analysis Result
+                </h2>
+
+                <div class="result-section">
+                    <p class="result-label">Your Symptoms</p>
+                    <p class="result-value">
+                        {{ symptoms }}
+                    </p>
+                </div>
+
+                <div class="result-section">
+                    <p class="result-label">Recommended Specialist</p>
+                    <p class="result-value">
+                        {{ recommended_doctor }}
+                    </p>
+                </div>
+
+                {% if recommendation %}
+                    <div class="result-section">
+                        <p class="result-label">Recommendation</p>
+                        <p class="result-description">
+                            {{ recommendation }}
+                        </p>
+                    </div>
+                {% endif %}
+
+                {% if risk_message %}
+                    <div class="warning">
+                        <strong>Important:</strong>
+                        {{ risk_message }}
+                    </div>
+                {% endif %}
+
+                <form method="POST" action="{% url 'confirm_doctor' %}">
+                    {% csrf_token %}
+
+                    <button type="submit" class="primary-btn">
+                        Confirm Doctor & Continue
+                    </button>
+                </form>
+
+            </section>
+        {% endif %}
+
+        <p class="footer-text">
+            CareQueue · Your health information is handled with care.
+            This recommendation does not replace a medical professional's assessment.
+        </p>
+
+    </main>
+
+</body>
+</html>

@@ -1,0 +1,1410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CareQueue - Smart Hospital Queue Management System</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+<style>
+/* =========================================================
+   CAREQUEUE HOMEPAGE - RESPONSIVE & MODERN HEALTHCARE DESIGN
+   ========================================================= */
+
+*, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    font-size: 16px;
+    -webkit-text-size-adjust: 100%;
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: 'Inter', Arial, Helvetica, sans-serif;
+    background: #f8fafc;
+    color: #0c2e30;
+    line-height: 1.6;
+    min-height: 100vh;
+    width: 100%;
+    overflow-x: hidden;
+}
+
+/* === FULL-WIDTH SHELL === */
+.container {
+    width: 100%;
+    max-width: 100%;
+    margin: 0;
+    padding: 0;
+    background: transparent;
+    overflow-x: hidden;
+}
+
+/* === NAVBAR === */
+.navbar {
+    width: 100%;
+    min-height: 72px;
+    background: #064f52;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 clamp(1.25rem, 5vw, 4rem);
+    color: white;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 14px rgba(0, 0, 0, 0.12);
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+    color: white;
+    cursor: pointer;
+}
+
+.logo-icon {
+    width: 42px;
+    height: 42px;
+    background: white;
+    color: #064f52;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    font-weight: 800;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+}
+
+.logo-text {
+    font-size: 1.35rem;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+}
+
+.logo-text span {
+    color: #62ddd7;
+}
+
+.nav-links {
+    display: flex;
+    align-items: center;
+    gap: 2.25rem;
+}
+
+.nav-links a {
+    color: #d7eeee;
+    text-decoration: none;
+    font-size: 1.05rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: color 0.2s ease;
+    padding: 0.5rem 0.25rem;
+    position: relative;
+}
+
+.nav-links a:hover,
+.nav-links a.active {
+    color: #62ddd7;
+}
+
+/* === HERO SECTION === */
+.hero {
+    position: relative;
+    width: 100%;
+    min-height: 540px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    overflow: hidden;
+}
+
+#vanta-bg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    pointer-events: none;
+}
+
+.hero-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+        90deg,
+        rgba(3, 56, 58, 0.94) 0%,
+        rgba(5, 79, 81, 0.82) 50%,
+        rgba(6, 95, 96, 0.55) 100%
+    );
+    z-index: 1;
+    pointer-events: none;
+}
+
+.hero-content {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: clamp(3.5rem, 7vw, 6rem) clamp(1.25rem, 5vw, 4rem);
+    text-align: left;
+}
+
+.live-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 18px;
+    border-radius: 9999px;
+    border: 1px solid rgba(255, 255, 255, 0.35);
+    background: rgba(255, 255, 255, 0.12);
+    backdrop-filter: blur(8px);
+    font-size: 0.95rem;
+    font-weight: 700;
+    margin-bottom: 1.75rem;
+    color: #e6fbf9;
+    letter-spacing: 0.02em;
+}
+
+.live-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #62ddd7;
+    box-shadow: 0 0 10px #62ddd7;
+}
+
+.hero h1 {
+    font-size: clamp(2.3rem, 4.8vw, 3.75rem);
+    line-height: 1.15;
+    letter-spacing: -0.03em;
+    font-weight: 800;
+    max-width: 860px;
+    margin-bottom: 1.5rem;
+    color: #ffffff;
+}
+
+.hero-description {
+    font-size: clamp(1.1rem, 1.8vw, 1.3rem);
+    line-height: 1.65;
+    color: #d7eeee;
+    max-width: 720px;
+    margin-bottom: 2.25rem;
+    font-weight: 400;
+}
+
+.hero-buttons {
+    display: flex;
+    gap: 1.25rem;
+    flex-wrap: wrap;
+}
+
+.hero-btn {
+    padding: 15px 32px;
+    border-radius: 10px;
+    font-size: 1.05rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    text-decoration: none;
+}
+
+.patient-btn {
+    background: #ffffff;
+    color: #064f52;
+    border: none;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.16);
+}
+
+.patient-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.22);
+    background: #f0fdfa;
+}
+
+.doctor-btn {
+    background: rgba(255, 255, 255, 0.12);
+    color: white;
+    border: 2px solid rgba(255, 255, 255, 0.45);
+    backdrop-filter: blur(6px);
+}
+
+.doctor-btn:hover {
+    background: rgba(255, 255, 255, 0.22);
+    border-color: #ffffff;
+    transform: translateY(-2px);
+}
+
+/* === STATS SECTION === */
+.stats {
+    background: #ffffff;
+    border-bottom: 1px solid #e2e8f0;
+    padding: clamp(2.5rem, 4vw, 3.5rem) clamp(1.25rem, 5vw, 4rem);
+    width: 100%;
+}
+
+.stats-container {
+    max-width: 1280px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.75rem;
+}
+
+.stat-card {
+    background: #f0f7f7;
+    border: 1px solid #cfe5e5;
+    border-radius: 16px;
+    padding: 2rem 1.75rem;
+    text-align: center;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.stat-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(6, 79, 82, 0.08);
+}
+
+.stat-card h2 {
+    color: #064f52;
+    font-size: clamp(2.2rem, 3.5vw, 3rem);
+    font-weight: 800;
+    line-height: 1;
+    margin-bottom: 0.5rem;
+}
+
+.stat-card p {
+    color: #52797b;
+    font-size: 1.05rem;
+    font-weight: 600;
+    margin: 0;
+}
+
+/* === LOGIN SECTION === */
+.login-section {
+    background: #f8fafc;
+    padding: clamp(4rem, 6vw, 6rem) clamp(1.25rem, 5vw, 4rem);
+    width: 100%;
+}
+
+.login-container-inner {
+    max-width: 1280px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.login-title {
+    color: #064f52;
+    font-size: clamp(2rem, 3.5vw, 2.75rem);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    margin-bottom: 0.75rem;
+}
+
+.login-subtitle {
+    color: #52797b;
+    font-size: 1.15rem;
+    max-width: 620px;
+    margin: 0 auto 3.5rem;
+}
+
+.login-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+    gap: 2.25rem;
+    text-align: left;
+}
+
+.login-card {
+    min-height: 280px;
+    border-radius: 20px;
+    padding: 2.75rem;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.login-card:hover {
+    transform: translateY(-4px);
+}
+
+.patient-card {
+    background: linear-gradient(135deg, #075f60 0%, #087f7d 100%);
+    color: white;
+    box-shadow: 0 12px 30px rgba(7, 95, 96, 0.16);
+}
+
+.doctor-card {
+    background: white;
+    border: 2px solid #cfe5e5;
+    color: #0c2e30;
+    box-shadow: 0 12px 30px rgba(6, 79, 82, 0.06);
+}
+
+.card-icon {
+    width: 58px;
+    height: 58px;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 26px;
+    margin-bottom: 1.5rem;
+}
+
+.patient-card .card-icon {
+    background: rgba(255, 255, 255, 0.18);
+    color: white;
+}
+
+.doctor-card .card-icon {
+    background: #e6f5f5;
+    color: #064f52;
+}
+
+.login-card h3 {
+    font-size: 1.6rem;
+    font-weight: 800;
+    margin-bottom: 0.85rem;
+}
+
+.login-card p {
+    font-size: 1.05rem;
+    line-height: 1.65;
+    margin-bottom: 2rem;
+}
+
+.patient-card p {
+    color: #d7eeee;
+}
+
+.doctor-card p {
+    color: #52797b;
+}
+
+.card-btn {
+    padding: 13px 28px;
+    border-radius: 9px;
+    border: none;
+    font-size: 1.05rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    width: fit-content;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.patient-card .card-btn {
+    background: white;
+    color: #064f52;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.patient-card .card-btn:hover {
+    background: #f0fdfa;
+    transform: translateY(-2px);
+}
+
+.doctor-card .card-btn {
+    background: #064f52;
+    color: white;
+    box-shadow: 0 4px 12px rgba(6, 79, 82, 0.15);
+}
+
+.doctor-card .card-btn:hover {
+    background: #043638;
+    transform: translateY(-2px);
+}
+
+/* === ABOUT PAGE === */
+#aboutPage {
+    display: none;
+    min-height: 650px;
+    background: #f8fafc;
+    width: 100%;
+}
+
+.about-hero {
+    background: linear-gradient(135deg, #064f52 0%, #087c7b 100%);
+    color: white;
+    text-align: center;
+    padding: clamp(4rem, 7vw, 6rem) clamp(1.25rem, 5vw, 3rem);
+}
+
+.about-small-title {
+    font-size: 0.95rem;
+    letter-spacing: 2px;
+    color: #62ddd7;
+    font-weight: 800;
+    margin-bottom: 1rem;
+    text-transform: uppercase;
+}
+
+.about-hero h1 {
+    font-size: clamp(2.2rem, 4vw, 3.4rem);
+    font-weight: 800;
+    margin-bottom: 1.25rem;
+    line-height: 1.2;
+}
+
+.about-hero p {
+    max-width: 720px;
+    margin: 0 auto;
+    color: #d7eeee;
+    font-size: 1.15rem;
+    line-height: 1.7;
+}
+
+.about-content {
+    padding: clamp(3.5rem, 6vw, 5rem) clamp(1.25rem, 5vw, 4rem);
+    max-width: 1280px;
+    margin: 0 auto;
+}
+
+.about-intro {
+    text-align: center;
+    margin-bottom: 3.5rem;
+}
+
+.about-intro h2 {
+    font-size: clamp(1.8rem, 3vw, 2.4rem);
+    color: #064f52;
+    font-weight: 800;
+    margin-bottom: 0.75rem;
+}
+
+.about-intro p {
+    max-width: 800px;
+    margin: 0 auto;
+    color: #52797b;
+    font-size: 1.1rem;
+    line-height: 1.7;
+}
+
+.about-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    margin-bottom: 3.5rem;
+}
+
+.about-card {
+    background: white;
+    border: 1px solid #cfe5e5;
+    border-radius: 16px;
+    padding: 2.25rem;
+    text-align: center;
+    box-shadow: 0 4px 16px rgba(6, 79, 82, 0.05);
+    transition: transform 0.25s ease;
+}
+
+.about-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 25px rgba(6, 79, 82, 0.09);
+}
+
+.about-icon {
+    width: 60px;
+    height: 60px;
+    margin: 0 auto 1.25rem;
+    background: #e6f5f5;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 26px;
+    color: #064f52;
+}
+
+.about-card h3 {
+    color: #064f52;
+    font-size: 1.35rem;
+    font-weight: 700;
+    margin-bottom: 0.75rem;
+}
+
+.about-card p {
+    color: #52797b;
+    font-size: 1.05rem;
+    line-height: 1.65;
+}
+
+.why-section {
+    background: white;
+    border-radius: 18px;
+    border: 1px solid #cfe5e5;
+    padding: clamp(2.5rem, 5vw, 3.5rem);
+    text-align: center;
+    box-shadow: 0 4px 16px rgba(6, 79, 82, 0.05);
+}
+
+.why-section h2 {
+    color: #064f52;
+    font-size: clamp(1.6rem, 2.5vw, 2.2rem);
+    font-weight: 800;
+    margin-bottom: 1rem;
+}
+
+.why-section p {
+    color: #52797b;
+    font-size: 1.1rem;
+    line-height: 1.75;
+    max-width: 860px;
+    margin: 0 auto 2rem;
+}
+
+.back-home {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 13px 28px;
+    background: #064f52;
+    color: white;
+    font-size: 1.05rem;
+    font-weight: 700;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.back-home:hover {
+    background: #043638;
+}
+
+/* === CONTACT PAGE === */
+#contactPage {
+    display: none;
+    min-height: 650px;
+    background: #f8fafc;
+    width: 100%;
+}
+
+.contact-hero {
+    background: linear-gradient(135deg, #064f52 0%, #087c7b 100%);
+    color: white;
+    text-align: center;
+    padding: clamp(4rem, 7vw, 6rem) clamp(1.25rem, 5vw, 3rem);
+}
+
+.contact-small-title {
+    font-size: 0.95rem;
+    letter-spacing: 2px;
+    color: #62ddd7;
+    font-weight: 800;
+    margin-bottom: 1rem;
+    text-transform: uppercase;
+}
+
+.contact-hero h1 {
+    font-size: clamp(2.2rem, 4vw, 3.4rem);
+    font-weight: 800;
+    margin-bottom: 1.25rem;
+    line-height: 1.2;
+}
+
+.contact-hero p {
+    max-width: 720px;
+    margin: 0 auto;
+    color: #d7eeee;
+    font-size: 1.15rem;
+    line-height: 1.7;
+}
+
+.contact-content {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: clamp(3.5rem, 6vw, 5rem) clamp(1.25rem, 5vw, 4rem);
+}
+
+.contact-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.35fr;
+    gap: 2.5rem;
+    margin-bottom: 3.5rem;
+}
+
+.contact-info {
+    background: linear-gradient(135deg, #075f60 0%, #087f7d 100%);
+    color: white;
+    border-radius: 18px;
+    padding: 3rem 2.5rem;
+    box-shadow: 0 10px 25px rgba(7, 95, 96, 0.12);
+}
+
+.contact-info h2 {
+    font-size: 1.85rem;
+    font-weight: 800;
+    margin-bottom: 0.75rem;
+}
+
+.contact-info > p {
+    color: #d7eeee;
+    font-size: 1.05rem;
+    line-height: 1.65;
+    margin-bottom: 2.25rem;
+}
+
+.contact-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    margin-bottom: 1.75rem;
+}
+
+.contact-item-icon {
+    width: 44px;
+    height: 44px;
+    flex-shrink: 0;
+    background: rgba(255, 255, 255, 0.18);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+}
+
+.contact-item h4 {
+    font-size: 1.05rem;
+    font-weight: 700;
+    margin-bottom: 0.25rem;
+}
+
+.contact-item p {
+    font-size: 0.95rem;
+    color: #d7eeee;
+    line-height: 1.5;
+}
+
+.contact-form {
+    background: white;
+    border: 1px solid #cfe5e5;
+    border-radius: 18px;
+    padding: 3rem 2.5rem;
+    box-shadow: 0 10px 25px rgba(6, 79, 82, 0.05);
+}
+
+.contact-form h2 {
+    font-size: 1.85rem;
+    color: #064f52;
+    font-weight: 800;
+    margin-bottom: 0.5rem;
+}
+
+.contact-form > p {
+    color: #52797b;
+    font-size: 1.05rem;
+    margin-bottom: 2rem;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    display: block;
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #0c2e30;
+    margin-bottom: 0.5rem;
+}
+
+.form-group input,
+.form-group textarea {
+    width: 100%;
+    padding: 14px 18px;
+    border: 1px solid #d4e5e5;
+    border-radius: 9px;
+    font-size: 1rem;
+    color: #0c2e30;
+    background: #f8fafc;
+    font-family: inherit;
+    transition: border-color 0.2s, background 0.2s;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: #064f52;
+    background: #ffffff;
+}
+
+.form-group textarea {
+    min-height: 130px;
+    resize: vertical;
+}
+
+.send-btn {
+    padding: 15px 34px;
+    background: #064f52;
+    color: white;
+    font-size: 1.05rem;
+    font-weight: 700;
+    border: none;
+    border-radius: 9px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.send-btn:hover {
+    background: #043638;
+}
+
+/* === LOGIN MODAL === */
+.modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(4, 54, 56, 0.65);
+    backdrop-filter: blur(5px);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+}
+
+.modal-box {
+    background: white;
+    width: 100%;
+    max-width: 460px;
+    border-radius: 20px;
+    padding: 2.75rem 2.25rem;
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25);
+    position: relative;
+    text-align: left;
+}
+
+.modal-box .close {
+    position: absolute;
+    top: 20px;
+    right: 24px;
+    font-size: 32px;
+    color: #52797b;
+    cursor: pointer;
+    line-height: 1;
+    transition: color 0.2s;
+}
+
+.modal-box .close:hover {
+    color: #064f52;
+}
+
+.modal-box h2 {
+    font-size: 1.85rem;
+    color: #064f52;
+    font-weight: 800;
+    margin-bottom: 0.5rem;
+}
+
+.modal-box p {
+    color: #52797b;
+    font-size: 1rem;
+    margin-bottom: 1.75rem;
+}
+
+.modal-box input {
+    width: 100%;
+    padding: 14px 18px;
+    border: 1px solid #d4e5e5;
+    border-radius: 9px;
+    font-size: 1rem;
+    color: #0c2e30;
+    background: #f8fafc;
+    margin-bottom: 1.25rem;
+    font-family: inherit;
+}
+
+.modal-box input:focus {
+    outline: none;
+    border-color: #064f52;
+    background: white;
+}
+
+.modal-login {
+    width: 100%;
+    padding: 15px;
+    background: #064f52;
+    color: white;
+    font-size: 1.05rem;
+    font-weight: 700;
+    border: none;
+    border-radius: 9px;
+    cursor: pointer;
+    transition: background 0.2s;
+    margin-top: 0.5rem;
+}
+
+.modal-login:hover {
+    background: #043638;
+}
+
+/* === RESPONSIVE MEDIA QUERIES === */
+@media (max-width: 900px) {
+    .contact-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 680px) {
+    .navbar {
+        padding: 0 1rem;
+    }
+
+    .nav-links {
+        gap: 1.25rem;
+    }
+
+    .nav-links a {
+        font-size: 0.95rem;
+    }
+
+    .hero-buttons {
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .hero-btn {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .login-cards {
+        grid-template-columns: 1fr;
+    }
+
+    .stats-container {
+        grid-template-columns: 1fr;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <!-- NAVBAR -->
+    <nav class="navbar">
+        <div class="logo" onclick="showHome()">
+            <div class="logo-icon">+</div>
+            <div class="logo-text">Care<span>Queue</span></div>
+        </div>
+
+        <div class="nav-links">
+            <a onclick="showHome()" id="navHome" class="active">Home</a>
+            <a onclick="showAbout()" id="navAbout">About</a>
+            <a onclick="showContact()" id="navContact">Contact</a>
+        </div>
+    </nav>
+
+    <!-- HOME PAGE -->
+    <div id="homePage">
+
+        <section class="hero">
+            <div id="vanta-bg"></div>
+            <div class="hero-overlay"></div>
+
+            <div class="hero-content">
+                <div class="live-badge">
+                    <span class="live-dot"></span>
+                    Smart Live Queue System Active
+                </div>
+
+                <h1>Welcome to CareQueue Hospital System</h1>
+
+                <p class="hero-description">
+                    Skip unnecessary waiting rooms. Track your place in the queue in real time,
+                    receive smart notifications, and know exactly when it is your turn to see the doctor.
+                </p>
+
+                <div class="hero-buttons">
+                    <button class="hero-btn patient-btn" onclick="openLogin('Patient')">
+                        <i class="fa-solid fa-user"></i> Patient Login
+                    </button>
+
+                    <button class="hero-btn doctor-btn" onclick="openLogin('Doctor')">
+                        <i class="fa-solid fa-user-doctor"></i> Doctor Login
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- STATS SECTION -->
+        <section class="stats">
+            <div class="stats-container">
+                <div class="stat-card">
+                    <h2>18</h2>
+                    <p>Patients currently in queue</p>
+                </div>
+
+                <div class="stat-card">
+                    <h2>14 min</h2>
+                    <p>Average consultation wait time</p>
+                </div>
+
+                <div class="stat-card">
+                    <h2>6</h2>
+                    <p>Specialist doctors on duty</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- PORTAL LOGIN SECTION -->
+        <section class="login-section">
+            <div class="login-container-inner">
+                <h2 class="login-title">Choose Your Hospital Portal</h2>
+                <p class="login-subtitle">
+                    Access the CareQueue system securely according to your healthcare role.
+                </p>
+
+                <div class="login-cards">
+
+                    <div class="login-card patient-card">
+                        <div>
+                            <div class="card-icon"><i class="fa-solid fa-user"></i></div>
+                            <h3>Patient Portal</h3>
+                            <p>
+                                Check your live queue status, view digital appointment passes, review past consultation history, and track real-time doctor availability.
+                            </p>
+                        </div>
+                        <button class="card-btn" onclick="openLogin('Patient')">
+                            Patient Login <i class="fa-solid fa-arrow-right"></i>
+                        </button>
+                    </div>
+
+                    <div class="login-card doctor-card">
+                        <div>
+                            <div class="card-icon"><i class="fa-solid fa-stethoscope"></i></div>
+                            <h3>Doctor Portal</h3>
+                            <p>
+                                Manage daily patient waiting lines, call the next patient in turn, review preliminary AI symptom reports, and manage consultation notes.
+                            </p>
+                        </div>
+                        <button class="card-btn" onclick="openLogin('Doctor')">
+                            Doctor Login <i class="fa-solid fa-arrow-right"></i>
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- ABOUT PAGE -->
+    <div id="aboutPage">
+
+        <section class="about-hero">
+            <div class="about-small-title">ABOUT CAREQUEUE</div>
+            <h1>A Smarter Way to Manage Hospital Consultations</h1>
+            <p>
+                CareQueue is an agentic AI-driven healthcare queue management system designed to make hospital visits faster, transparent, and more convenient for patients and doctors.
+            </p>
+        </section>
+
+        <section class="about-content">
+
+            <div class="about-intro">
+                <h2>What is CareQueue?</h2>
+                <p>
+                    CareQueue coordinates patient triage, symptom risk assessments, and smart queue prioritisation. Patients monitor their wait times remotely while medical staff enjoy streamlined consultation workflows.
+                </p>
+            </div>
+
+            <div class="about-cards">
+                <div class="about-card">
+                    <div class="about-icon"><i class="fa-solid fa-clock"></i></div>
+                    <h3>Minimal Waiting</h3>
+                    <p>
+                        Real-time queue estimates and dynamic priority scheduling eliminate packed waiting rooms and unnecessary idle time.
+                    </p>
+                </div>
+
+                <div class="about-card">
+                    <div class="about-icon"><i class="fa-solid fa-route"></i></div>
+                    <h3>Live Queue Tracking</h3>
+                    <p>
+                        Real-time token position updates inform patients when their turn approaches, with automatic SMS alerts.
+                    </p>
+                </div>
+
+                <div class="about-card">
+                    <div class="about-icon"><i class="fa-solid fa-user-doctor"></i></div>
+                    <h3>Doctor Efficiency</h3>
+                    <p>
+                        Physicians easily view scheduled patients, manage high-priority emergency cases, and update consultation statuses in one click.
+                    </p>
+                </div>
+            </div>
+
+            <div class="why-section">
+                <h2>Why CareQueue?</h2>
+                <p>
+                    Our mission is to create a seamless hospital experience for every patient. CareQueue bridges the gap between patient intake and doctor consultation with artificial intelligence and modern digital queueing.
+                </p>
+
+                <button class="back-home" onclick="showHome()">
+                    <i class="fa-solid fa-arrow-left"></i> Back to Home
+                </button>
+            </div>
+
+        </section>
+    </div>
+
+    <!-- CONTACT PAGE -->
+    <div id="contactPage">
+
+        <section class="contact-hero">
+            <div class="contact-small-title">CONTACT CAREQUEUE</div>
+            <h1>We're Here to Help You 24/7</h1>
+            <p>
+                Have a question or need assistance with your appointment? Contact our hospital support team at any time.
+            </p>
+        </section>
+
+        <section class="contact-content">
+            <div class="contact-grid">
+
+                <div class="contact-info">
+                    <h2>Hospital Information</h2>
+                    <p>
+                        CareQueue Hospital is open 24 hours a day, 7 days a week. Our helpdesk and emergency response staff are always available.
+                    </p>
+
+                    <div class="contact-item">
+                        <div class="contact-item-icon"><i class="fa-solid fa-location-dot"></i></div>
+                        <div>
+                            <h4>Address</h4>
+                            <p>CareQueue Hospital, Gandhipuram,<br>Coimbatore, Tamil Nadu 641012</p>
+                        </div>
+                    </div>
+
+                    <div class="contact-item">
+                        <div class="contact-item-icon"><i class="fa-solid fa-phone"></i></div>
+                        <div>
+                            <h4>Phone</h4>
+                            <p>+91 98765 43210 / +91 422 2345678</p>
+                        </div>
+                    </div>
+
+                    <div class="contact-item">
+                        <div class="contact-item-icon"><i class="fa-solid fa-envelope"></i></div>
+                        <div>
+                            <h4>Email</h4>
+                            <p>support@carequeue.hospital</p>
+                        </div>
+                    </div>
+
+                    <div class="contact-item">
+                        <div class="contact-item-icon"><i class="fa-solid fa-clock"></i></div>
+                        <div>
+                            <h4>Emergency OPD Hours</h4>
+                            <p>Open 24 Hours &bull; Monday through Sunday</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="contact-form">
+                    <h2>Send Us a Message</h2>
+                    <p>
+                        Fill in your details below and our patient relations team will respond promptly.
+                    </p>
+
+                    <div id="contactAlert" style="display:none; padding:12px 16px; border-radius:8px; font-size:14px; margin-bottom:16px; line-height:1.5;"></div>
+
+                    {% csrf_token %}
+
+                    <div class="form-group">
+                        <label for="contactName">Your Name</label>
+                        <input type="text" id="contactName" placeholder="Enter your full name" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="contactEmail">Email Address</label>
+                        <input type="email" id="contactEmail" placeholder="Enter your email" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="contactMessage">Message</label>
+                        <textarea id="contactMessage" placeholder="Write your message or inquiry..." required></textarea>
+                    </div>
+
+                    <button class="send-btn" type="button" onclick="sendMessage()">
+                        <i class="fa-solid fa-paper-plane"></i> Send Message
+                    </button>
+                </div>
+
+            </div>
+
+            <div style="text-align: center;">
+                <button class="back-home" onclick="showHome()">
+                    <i class="fa-solid fa-arrow-left"></i> Back to Home
+                </button>
+            </div>
+        </section>
+    </div>
+</div>
+
+<!-- LOGIN MODAL -->
+<div class="modal" id="loginModal">
+    <div class="modal-box">
+        <span class="close" onclick="closeLogin()">&times;</span>
+
+        <h2 id="loginTitle">Login</h2>
+        <p>Enter your credentials to access your hospital account.</p>
+
+        <input type="text" id="username" placeholder="Username" autocomplete="username">
+        <input type="password" id="password" placeholder="Password" autocomplete="current-password">
+
+        <button class="modal-login" onclick="loginUser()">
+            Continue to Account
+        </button>
+    </div>
+</div>
+
+<!-- THREE.JS AND VANTA -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.net.min.js"></script>
+
+<script>
+/* VANTA ANIMATED BACKGROUND WITH RESIZE SUPPORT */
+let vantaEffect = null;
+
+function initVanta() {
+    if (typeof VANTA !== "undefined" && VANTA.NET) {
+        if (vantaEffect) {
+            try { vantaEffect.destroy(); } catch (e) {}
+        }
+        vantaEffect = VANTA.NET({
+            el: "#vanta-bg",
+            mouseControls: true,
+            touchControls: true,
+            gyroControls: false,
+            minHeight: 200.00,
+            minWidth: 200.00,
+            scale: 1.00,
+            scaleMobile: 1.00,
+            color: 0x62ddd7,
+            backgroundColor: 0x07585a,
+            points: 12.00,
+            maxDistance: 24.00,
+            spacing: 18.00,
+            showDots: true
+        });
+    }
+}
+
+window.addEventListener("load", initVanta);
+
+window.addEventListener("resize", function () {
+    if (vantaEffect && typeof vantaEffect.resize === "function") {
+        vantaEffect.resize();
+    }
+});
+
+/* PAGE TABS */
+function updateNavHighlight(tab) {
+    document.getElementById("navHome").classList.toggle("active", tab === "home");
+    document.getElementById("navAbout").classList.toggle("active", tab === "about");
+    document.getElementById("navContact").classList.toggle("active", tab === "contact");
+}
+
+function showHome() {
+    document.getElementById("homePage").style.display = "block";
+    document.getElementById("aboutPage").style.display = "none";
+    document.getElementById("contactPage").style.display = "none";
+    updateNavHighlight("home");
+    if (history.pushState) history.pushState(null, null, "#");
+    window.scrollTo({ top: 0, behavior: "smooth" });
+    if (vantaEffect && typeof vantaEffect.resize === "function") {
+        setTimeout(function() { vantaEffect.resize(); }, 100);
+    }
+}
+
+function showAbout() {
+    document.getElementById("homePage").style.display = "none";
+    document.getElementById("aboutPage").style.display = "block";
+    document.getElementById("contactPage").style.display = "none";
+    updateNavHighlight("about");
+    if (history.pushState) history.pushState(null, null, "#about");
+    window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+function showContact() {
+    document.getElementById("homePage").style.display = "none";
+    document.getElementById("aboutPage").style.display = "none";
+    document.getElementById("contactPage").style.display = "block";
+    updateNavHighlight("contact");
+    if (history.pushState) history.pushState(null, null, "#contact");
+    window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+/* CSRF HELPER */
+function getCsrfToken() {
+    const input = document.querySelector('[name=csrfmiddlewaretoken]');
+    if (input) return input.value;
+    const cookies = document.cookie.split(';');
+    for (let c of cookies) {
+        c = c.trim();
+        if (c.startsWith('csrftoken=')) return c.substring('csrftoken='.length);
+    }
+    return '';
+}
+
+function showContactNotice(text, type) {
+    const alertBox = document.getElementById("contactAlert");
+    if (!alertBox) return;
+    alertBox.textContent = text;
+    alertBox.style.display = "block";
+    if (type === "success") {
+        alertBox.style.background = "#e6f8f0";
+        alertBox.style.color = "#0a7a4b";
+        alertBox.style.border = "1px solid #b7ecd4";
+    } else {
+        alertBox.style.background = "#fff0f0";
+        alertBox.style.color = "#a32d2d";
+        alertBox.style.border = "1px solid #f0cccc";
+    }
+}
+
+/* SEND CONTACT MESSAGE VIA REAL BACKEND DATABASE SAVE */
+async function sendMessage() {
+    const nameInput = document.getElementById("contactName");
+    const emailInput = document.getElementById("contactEmail");
+    const messageInput = document.getElementById("contactMessage");
+    const sendBtn = document.querySelector(".send-btn");
+
+    const name = nameInput.value.trim();
+    const email = emailInput.value.trim();
+    const message = messageInput.value.trim();
+
+    if (!name || !email || !message) {
+        showContactNotice("Please fill in all the required fields (Name, Email, Message).", "error");
+        return;
+    }
+
+    if (!email.includes("@") || !email.includes(".")) {
+        showContactNotice("Please enter a valid email address.", "error");
+        return;
+    }
+
+    sendBtn.disabled = true;
+    sendBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Sending...';
+
+    try {
+        const formData = new FormData();
+        formData.append("name", name);
+        formData.append("email", email);
+        formData.append("message", message);
+        formData.append("csrfmiddlewaretoken", getCsrfToken());
+
+        const res = await fetch("/contact/", {
+            method: "POST",
+            body: formData,
+            headers: {
+                "X-Requested-With": "XMLHttpRequest"
+            }
+        });
+
+        const data = await res.json();
+
+        if (res.ok && data.success) {
+            showContactNotice(data.message || "Message sent successfully!", "success");
+            nameInput.value = "";
+            emailInput.value = "";
+            messageInput.value = "";
+        } else {
+            showContactNotice(data.error || "Failed to save message. Please try again.", "error");
+        }
+    } catch (err) {
+        console.error("Contact send error:", err);
+        showContactNotice("Network error. Please try again later.", "error");
+    } finally {
+        sendBtn.disabled = false;
+        sendBtn.innerHTML = '<i class="fa-solid fa-paper-plane"></i> Send Message';
+    }
+}
+
+// Check initial tab from hash or server
+window.addEventListener("DOMContentLoaded", function () {
+    const hash = window.location.hash;
+    if (hash === "#about" || "{{ active_tab }}" === "about") {
+        showAbout();
+    } else if (hash === "#contact" || "{{ active_tab }}" === "contact") {
+        showContact();
+    }
+});
+
+/* LOGIN MODAL & ROUTING */
+let selectedRole = "";
+
+function openLogin(role) {
+    selectedRole = role;
+    document.getElementById("loginTitle").innerText = role + " Login";
+    document.getElementById("username").value = "";
+    document.getElementById("password").value = "";
+    document.getElementById("loginModal").style.display = "flex";
+    document.getElementById("username").focus();
+}
+
+function closeLogin() {
+    document.getElementById("loginModal").style.display = "none";
+}
+
+function loginUser() {
+    const username = document.getElementById("username").value.trim();
+    const password = document.getElementById("password").value.trim();
+
+    if (username === "" || password === "") {
+        alert("Please enter username and password.");
+        return;
+    }
+
+    if (selectedRole === "Patient") {
+        window.location.href = "/patient-login/";
+        return;
+    }
+
+    if (selectedRole === "Doctor") {
+        window.location.href = "/doctor-login/";
+        return;
+    }
+
+    alert("Please select a valid login role.");
+}
+
+window.addEventListener("click", function (event) {
+    const modal = document.getElementById("loginModal");
+    if (event.target === modal) {
+        closeLogin();
+    }
+});
+
+document.getElementById("password").addEventListener("keydown", function (event) {
+    if (event.key === "Enter") loginUser();
+});
+
+document.getElementById("username").addEventListener("keydown", function (event) {
+    if (event.key === "Enter") loginUser();
+});
+</script>
+
+</body>
+</html>

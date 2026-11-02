@@ -1,0 +1,1037 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Doctor Dashboard - Smart Hospital Queue</title>
+
+
+    <!-- Google Font -->
+
+    <link rel="preconnect"
+          href="https://fonts.googleapis.com">
+
+    <link rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&family=Inter:wght@400;500;600;700;800&display=swap"
+          rel="stylesheet">
+
+
+    <!-- Font Awesome -->
+
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+    >
+
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+
+        body {
+
+            background: #f2f7f7;
+
+            font-family: "Inter", Arial, sans-serif;
+
+            color: #063f43;
+
+            min-height: 100vh;
+
+            display: flex;
+
+            justify-content: center;
+
+            align-items: flex-start;
+
+            padding: 55px 20px;
+        }
+
+
+        /* ================================
+           MAIN DASHBOARD
+        ================================= */
+
+        .dashboard {
+
+            width: 100%;
+
+            max-width: 880px;
+
+            background: white;
+
+            border-radius: 28px;
+
+            overflow: hidden;
+
+            box-shadow:
+                0 10px 30px rgba(0, 60, 65, 0.08);
+
+            border: 1px solid #dce8e8;
+        }
+
+
+        /* ================================
+           HEADER
+        ================================= */
+
+        .header {
+
+            height: 130px;
+
+            background: #0b6869;
+
+            color: white;
+
+            display: flex;
+
+            align-items: center;
+
+            padding: 0 42px;
+
+            position: relative;
+
+            overflow: hidden;
+        }
+
+
+        .header::after {
+
+            content: "";
+
+            position: absolute;
+
+            width: 300px;
+
+            height: 300px;
+
+            right: -70px;
+
+            top: -100px;
+
+            border-radius: 50%;
+
+            background: rgba(255,255,255,0.07);
+        }
+
+
+        .header-logo {
+
+            width: 40px;
+
+            height: 40px;
+
+            background: rgba(255,255,255,0.13);
+
+            border-radius: 11px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            font-size: 21px;
+
+            z-index: 2;
+        }
+
+
+        .header-text {
+
+            margin-left: 16px;
+
+            z-index: 2;
+        }
+
+
+        .header-title {
+
+            font-family: "Libre Baskerville", serif;
+
+            font-size: 27px;
+
+            font-weight: 700;
+
+            line-height: 1.2;
+        }
+
+
+        .header-subtitle {
+
+            margin-top: 4px;
+
+            font-size: 16px;
+
+            font-weight: 400;
+        }
+
+
+        /* ================================
+           CONTENT
+        ================================= */
+
+        .content {
+
+            padding: 36px 43px 42px;
+        }
+
+
+        /* ================================
+           WELCOME
+        ================================= */
+
+        .welcome {
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            padding-bottom: 43px;
+
+            border-bottom: 1px solid #edf1f1;
+        }
+
+
+        .welcome-left {
+
+            display: flex;
+
+            align-items: center;
+        }
+
+
+        .doctor-circle {
+
+            width: 76px;
+
+            height: 76px;
+
+            border-radius: 50%;
+
+            border: 2px solid #087274;
+
+            background: #e9f4f3;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            color: #075d60;
+
+            font-size: 29px;
+
+            flex-shrink: 0;
+        }
+
+
+        .welcome-text {
+
+            margin-left: 22px;
+        }
+
+
+        .welcome-text h1 {
+
+            font-family: "Libre Baskerville", serif;
+
+            font-size: 29px;
+
+            color: #063f43;
+
+            font-weight: 700;
+
+            margin-bottom: 8px;
+        }
+
+
+        .welcome-text p {
+
+            color: #678082;
+
+            font-size: 17px;
+        }
+
+
+        /* ================================
+           DUTY STATUS
+        ================================= */
+
+        .duty-status {
+
+            background: #e8f5eb;
+
+            color: #277257;
+
+            padding: 10px 17px;
+
+            border-radius: 25px;
+
+            font-size: 14px;
+
+            font-weight: 600;
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 8px;
+        }
+
+
+        .duty-dot {
+
+            width: 11px;
+
+            height: 11px;
+
+            background: #4b9576;
+
+            border-radius: 50%;
+        }
+
+
+        /* ================================
+           STATISTICS
+        ================================= */
+
+        .statistics {
+
+            padding-top: 34px;
+        }
+
+
+        .statistics-heading {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 14px;
+
+            margin-bottom: 27px;
+        }
+
+
+        .statistics-heading h2 {
+
+            font-family: "Libre Baskerville", serif;
+
+            font-size: 24px;
+
+            color: #063f43;
+        }
+
+
+        .live-text {
+
+            font-size: 12px;
+
+            color: #5c7477;
+
+            font-weight: 500;
+        }
+
+
+        /* ================================
+           STAT CARDS
+        ================================= */
+
+        .stats-grid {
+
+            display: grid;
+
+            grid-template-columns: 1fr 1fr;
+
+            gap: 19px;
+        }
+
+
+        .stat-card {
+
+            min-height: 106px;
+
+            border: 1px solid #d6e4e4;
+
+            border-radius: 17px;
+
+            display: flex;
+
+            align-items: center;
+
+            padding: 20px 21px;
+
+            background: #ffffff;
+
+            transition: 0.2s;
+        }
+
+
+        .stat-card:hover {
+
+            transform: translateY(-2px);
+
+            box-shadow:
+                0 6px 15px rgba(0, 70, 75, 0.06);
+        }
+
+
+        .stat-icon {
+
+            width: 52px;
+
+            height: 52px;
+
+            border-radius: 13px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            font-size: 20px;
+
+            margin-right: 16px;
+
+            flex-shrink: 0;
+        }
+
+
+        .total-icon {
+
+            background: #e4f2f1;
+
+            color: #087174;
+        }
+
+
+        .pending-icon {
+
+            background: #fff3df;
+
+            color: #d78921;
+        }
+
+
+        .completed-icon {
+
+            background: #e7f5eb;
+
+            color: #44815e;
+        }
+
+
+        .priority-icon {
+
+            background: #fce9e7;
+
+            color: #d55a4d;
+        }
+
+
+        .stat-info {
+
+            display: flex;
+
+            flex-direction: column;
+        }
+
+
+        .stat-label {
+
+            font-size: 16px;
+
+            color: #315f63;
+
+            margin-bottom: 5px;
+        }
+
+
+        .stat-number {
+
+            font-family: "Libre Baskerville", serif;
+
+            font-size: 32px;
+
+            line-height: 1;
+
+            font-weight: 700;
+
+            color: #063f43;
+        }
+
+
+        .priority-number {
+
+            color: #d25d50;
+        }
+
+
+        /* ================================
+           BUTTONS
+        ================================= */
+
+        .buttons {
+
+            display: grid;
+
+            grid-template-columns: 1fr 1fr;
+
+            gap: 17px;
+
+            margin-top: 42px;
+        }
+
+
+        .btn {
+
+            height: 64px;
+
+            border-radius: 14px;
+
+            font-family: "Inter", sans-serif;
+
+            font-size: 18px;
+
+            font-weight: 700;
+
+            cursor: pointer;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            gap: 14px;
+
+            transition: 0.2s;
+
+            text-decoration: none;
+        }
+
+
+        /* VIEW APPOINTMENTS */
+
+        .appointments-btn {
+
+            background: white;
+
+            color: #075d60;
+
+            border: 2px solid #087274;
+        }
+
+
+        .appointments-btn:hover {
+
+            background: #eef8f7;
+        }
+
+
+        /* LOGOUT */
+
+        .logout-btn {
+
+            background: #0b6869;
+
+            color: white;
+
+            border: 2px solid #0b6869;
+        }
+
+
+        .logout-btn:hover {
+
+            background: #075557;
+        }
+
+
+        /* ================================
+           RESPONSIVE
+        ================================= */
+
+        @media (max-width: 700px) {
+
+            body {
+
+                padding: 20px 10px;
+            }
+
+
+            .dashboard {
+
+                border-radius: 20px;
+            }
+
+
+            .header {
+
+                padding: 0 25px;
+            }
+
+
+            .header-title {
+
+                font-size: 22px;
+            }
+
+
+            .content {
+
+                padding: 30px 25px;
+            }
+
+
+            .welcome-text h1 {
+
+                font-size: 23px;
+            }
+
+
+            .welcome-text p {
+
+                font-size: 14px;
+            }
+
+
+            .doctor-circle {
+
+                width: 60px;
+
+                height: 60px;
+            }
+
+
+            .duty-status {
+
+                padding: 8px 12px;
+            }
+
+        }
+
+
+        @media (max-width: 550px) {
+
+            .welcome {
+
+                align-items: flex-start;
+
+                gap: 15px;
+            }
+
+
+            .duty-status {
+
+                font-size: 12px;
+            }
+
+
+            .stats-grid {
+
+                grid-template-columns: 1fr;
+            }
+
+
+            .buttons {
+
+                grid-template-columns: 1fr;
+            }
+
+        }
+
+
+        @media (max-width: 420px) {
+
+            .header {
+
+                height: 110px;
+            }
+
+
+            .header-title {
+
+                font-size: 19px;
+            }
+
+
+            .header-subtitle {
+
+                font-size: 13px;
+            }
+
+
+            .content {
+
+                padding: 25px 18px;
+            }
+
+
+            .welcome-text {
+
+                margin-left: 12px;
+            }
+
+
+            .welcome-text h1 {
+
+                font-size: 19px;
+            }
+
+
+            .welcome-text p {
+
+                font-size: 12px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<div class="dashboard">
+
+
+    <!-- ================================
+         HEADER
+    ================================= -->
+
+    <header class="header">
+
+
+        <div class="header-logo">
+
+            <i class="fa-solid fa-shield-halved"></i>
+
+        </div>
+
+
+        <div class="header-text">
+
+            <div class="header-title">
+
+                Smart Hospital Queue
+
+            </div>
+
+
+            <div class="header-subtitle">
+
+                Doctor Dashboard
+
+            </div>
+
+        </div>
+
+
+    </header>
+
+
+
+    <!-- ================================
+         MAIN CONTENT
+    ================================= -->
+
+    <main class="content">
+
+
+        <!-- ================================
+             WELCOME
+        ================================= -->
+
+        <section class="welcome">
+
+
+            <div class="welcome-left">
+
+
+                <div class="doctor-circle">
+
+                    <i class="fa-solid fa-user-doctor"></i>
+
+                </div>
+
+
+                <div class="welcome-text">
+
+                    <h1>
+                        Welcome, {{ doctor_name|default:"Dr. Kumar" }}
+                    </h1>
+
+
+
+                    <p>
+
+                        Here is today's queue overview at a glance
+
+                    </p>
+
+                </div>
+
+
+            </div>
+
+
+            <!-- ON DUTY -->
+
+            <div class="duty-status">
+
+                <span class="duty-dot"></span>
+
+                On duty
+
+            </div>
+
+
+        </section>
+
+
+
+        <!-- ================================
+             STATISTICS
+        ================================= -->
+
+        <section class="statistics">
+
+
+            <div class="statistics-heading">
+
+                <h2>
+
+                    Hospital Statistics
+
+                </h2>
+
+
+                <span class="live-text">
+
+                    UPDATED LIVE
+
+                </span>
+
+            </div>
+
+
+
+            <div class="stats-grid">
+
+
+                <!-- TOTAL PATIENTS -->
+
+                <div class="stat-card">
+
+
+                    <div class="stat-icon total-icon">
+
+                        <i class="fa-solid fa-users"></i>
+
+                    </div>
+
+
+                    <div class="stat-info">
+
+
+                        <div class="stat-label">
+
+                            Total Patients
+
+                        </div>
+
+
+                        <div class="stat-number">
+
+                            {{ total_patients }}
+
+                        </div>
+
+
+                    </div>
+
+
+                </div>
+
+
+
+                <!-- PENDING -->
+
+                <div class="stat-card">
+
+
+                    <div class="stat-icon pending-icon">
+
+                        <i class="fa-regular fa-clock"></i>
+
+                    </div>
+
+
+                    <div class="stat-info">
+
+
+                        <div class="stat-label">
+
+                            Pending Patients
+
+                        </div>
+
+
+                        <div class="stat-number">
+
+                            {{ pending_patients }}
+
+                        </div>
+
+
+                    </div>
+
+
+                </div>
+
+
+
+                <!-- COMPLETED -->
+
+                <div class="stat-card">
+
+
+                    <div class="stat-icon completed-icon">
+
+                        <i class="fa-regular fa-circle-check"></i>
+
+                    </div>
+
+
+                    <div class="stat-info">
+
+
+                        <div class="stat-label">
+
+                            Completed Patients
+
+                        </div>
+
+
+                        <div class="stat-number">
+
+                            {{ completed_patients }}
+
+                        </div>
+
+
+                    </div>
+
+
+                </div>
+
+
+
+                <!-- HIGH PRIORITY -->
+
+                <div class="stat-card">
+
+
+                    <div class="stat-icon priority-icon">
+
+                        <i class="fa-solid fa-triangle-exclamation"></i>
+
+                    </div>
+
+
+                    <div class="stat-info">
+
+
+                        <div class="stat-label">
+
+                            High Priority
+
+                        </div>
+
+
+                        <div class="stat-number priority-number">
+
+                            {{ high_priority }}
+
+                        </div>
+
+
+                    </div>
+
+
+                </div>
+
+
+            </div>
+
+
+
+            <!-- ================================
+                 BUTTONS
+            ================================= -->
+
+            <div class="buttons" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));">
+
+                <!-- VIEW APPOINTMENTS -->
+                <a
+                    href="{% url 'doctor_appointments' %}"
+                    class="btn appointments-btn"
+                >
+                    <i class="fa-solid fa-calendar-check"></i>
+                    Appointments
+                </a>
+
+                <!-- VIEW FEEDBACK -->
+                <a
+                    href="{% url 'doctor_feedback' %}"
+                    class="btn appointments-btn"
+                >
+                    <i class="fa-solid fa-comments"></i>
+                    Feedback ({{ feedback_count|default:"0" }})
+                </a>
+
+                <!-- LOGOUT -->
+                <a
+                    href="{% url 'doctor_logout' %}"
+                    class="btn logout-btn"
+                >
+                    <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                    Logout
+                </a>
+
+            </div>
+
+
+
+        </section>
+
+
+    </main>
+
+
+</div>
+
+
+</body>
+
+</html>

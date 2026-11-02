@@ -1,0 +1,245 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Patient Login - Smart Hospital Queue</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            background: #f7f9f8;
+            font-family: Arial, Helvetica, sans-serif;
+            color: #1d3335;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+        }
+
+        .login-container {
+            width: calc(100% - 30px);
+            max-width: 420px;
+            margin-top: 22px;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            border: 1px solid #dce4e4;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+        }
+
+        .header {
+            height: 60px;
+            background: #064b4d;
+            display: flex;
+            align-items: center;
+            padding: 0 20px;
+            color: white;
+        }
+
+        .logo-icon {
+            width: 30px;
+            height: 30px;
+            background: #16878a;
+            border-radius: 7px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 17px;
+            margin-right: 9px;
+        }
+
+        .logo-text {
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        .content {
+            padding: 28px 25px 20px;
+        }
+
+        .title-section {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 25px;
+        }
+
+        .patient-icon {
+            width: 40px;
+            height: 40px;
+            flex-shrink: 0;
+            border-radius: 50%;
+            background: #e1f3f3;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 19px;
+            color: #0d777b;
+        }
+
+        .title-section h1 {
+            margin: 0;
+            font-size: 20px;
+            color: #172d2f;
+        }
+
+        .title-section p {
+            margin: 3px 0 0;
+            font-size: 11px;
+            color: #777;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 6px;
+            font-size: 11px;
+            color: #4d5556;
+        }
+
+        .form-group input {
+            width: 100%;
+            height: 40px;
+            border: 1px solid #d8dddd;
+            border-radius: 5px;
+            padding: 0 12px;
+            font-size: 13px;
+            outline: none;
+            background: white;
+        }
+
+        .form-group input:focus {
+            border-color: #16878a;
+            box-shadow: 0 0 0 2px rgba(22, 135, 138, 0.08);
+        }
+
+        .login-button {
+            width: 100%;
+            height: 40px;
+            margin-top: 3px;
+            border: none;
+            border-radius: 6px;
+            background: #147d80;
+            color: white;
+            font-size: 13px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .login-button:hover {
+            background: #0f6d70;
+        }
+
+        .error-message {
+            background: #fff0f0;
+            color: #a32121;
+            border: 1px solid #f0caca;
+            padding: 10px;
+            border-radius: 5px;
+            font-size: 12px;
+            margin-bottom: 15px;
+        }
+
+        .security {
+            text-align: center;
+            margin-top: 17px;
+            font-size: 10px;
+            color: #888;
+        }
+
+        @media (max-width: 480px) {
+            .login-container {
+                margin-top: 15px;
+            }
+
+            .content {
+                padding: 24px 20px 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="login-container">
+
+        <div class="header">
+            <div class="logo-icon">🏥</div>
+            <div class="logo-text">Smart hospital queue</div>
+        </div>
+
+        <div class="content">
+
+            <div class="title-section">
+                <div class="patient-icon">♙</div>
+
+                <div>
+                    <h1>Patient login</h1>
+                    <p>Sign in to continue to your symptoms page</p>
+                </div>
+            </div>
+
+            {% if error %}
+                <div class="error-message">
+                    {{ error }}
+                </div>
+            {% endif %}
+
+            <form method="POST" action="{% url 'patient_login' %}">
+                {% csrf_token %}
+
+                <div class="form-group">
+                    <label for="patient_name">Patient name</label>
+
+                    <input
+                        type="text"
+                        id="patient_name"
+                        name="patient_name"
+                        placeholder="Enter your name"
+                        autocomplete="name"
+                        required
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Password</label>
+
+                    <input
+                        type="password"
+                        id="password"
+                        name="password"
+                        placeholder="Enter your password"
+                        autocomplete="current-password"
+                        required
+                    >
+                </div>
+
+                <button type="submit" class="login-button">
+                    Log in
+                </button>
+
+                <div style="text-align: center; margin-top: 14px;">
+                    <a href="{% url 'home' %}" style="color: #147d80; text-decoration: none; font-size: 12px; font-weight: bold;">
+                        ← Back to Home
+                    </a>
+                </div>
+            </form>
+
+            <div class="security">
+                🔒 Your information is kept private and secure
+            </div>
+
+        </div>
+    </div>
+</body>
+</html>
+

@@ -1,0 +1,557 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}My Appointment History — CareQueue{% endblock %}
+
+{% block extra_head %}
+<link rel="stylesheet" href="{% static 'css/queue.css' %}">
+<style>
+    /* ===== PAGE LAYOUT ===== */
+    .history-page {
+        display: grid;
+        grid-template-columns: 240px 1fr;
+        gap: 1.5rem;
+        min-height: calc(100vh - 120px);
+        width: 100%;
+    }
+
+    /* ===== SIDEBAR ===== */
+    .history-sidebar {
+        background: #ffffff;
+        border-radius: 14px;
+        padding: 1.5rem 1rem;
+        box-shadow: 0 2px 12px rgba(6, 79, 82, 0.06);
+        border: 1px solid #d4e5e5;
+        height: fit-content;
+        position: sticky;
+        top: 80px;
+    }
+
+    .history-sidebar .sidebar-brand {
+        display: flex;
+        align-items: center;
+        gap: 0.6rem;
+        margin-bottom: 1.5rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid #e8f0f0;
+    }
+
+    .history-sidebar .sidebar-brand i {
+        font-size: 1.3rem;
+        color: #064f52;
+    }
+
+    .history-sidebar .sidebar-brand span {
+        font-weight: 800;
+        font-size: 1.05rem;
+        color: #064f52;
+    }
+
+    .history-sidebar a {
+        display: flex;
+        align-items: center;
+        gap: 0.65rem;
+        padding: 0.7rem 0.9rem;
+        border-radius: 8px;
+        text-decoration: none;
+        color: #3a6b6d;
+        font-size: 0.88rem;
+        font-weight: 600;
+        transition: background 0.2s, color 0.2s;
+        margin-bottom: 0.3rem;
+    }
+
+    .history-sidebar a:hover {
+        background: #e6f5f5;
+        color: #064f52;
+    }
+
+    .history-sidebar a.active {
+        background: #064f52;
+        color: #ffffff;
+    }
+
+    .history-sidebar a i {
+        width: 1.25rem;
+        text-align: center;
+        font-size: 0.95rem;
+    }
+
+    /* ===== MAIN CONTENT ===== */
+    .history-content {
+        min-width: 0;
+        width: 100%;
+    }
+
+    .history-header {
+        background: #ffffff;
+        border-radius: 14px;
+        padding: 1.5rem;
+        border: 1px solid #d4e5e5;
+        box-shadow: 0 2px 10px rgba(6, 79, 82, 0.05);
+        margin-bottom: 1.5rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 1rem;
+    }
+
+    .history-header-title h1 {
+        font-size: clamp(1.25rem, 2.5vw, 1.7rem);
+        font-weight: 800;
+        color: #064f52;
+        margin: 0 0 0.3rem;
+        display: flex;
+        align-items: center;
+        gap: 0.6rem;
+    }
+
+    .history-header-title p {
+        margin: 0;
+        color: #52797b;
+        font-size: 0.88rem;
+    }
+
+    /* ===== FILTER BAR ===== */
+    .filter-card {
+        background: #ffffff;
+        border-radius: 14px;
+        padding: 1.25rem 1.5rem;
+        border: 1px solid #d4e5e5;
+        box-shadow: 0 2px 10px rgba(6, 79, 82, 0.05);
+        margin-bottom: 1.5rem;
+    }
+
+    .filter-form {
+        display: flex;
+        gap: 1rem;
+        flex-wrap: wrap;
+        align-items: center;
+    }
+
+    .filter-group {
+        display: flex;
+        flex-direction: column;
+        gap: 0.35rem;
+        flex: 1 1 200px;
+    }
+
+    .filter-group label {
+        font-size: 0.75rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        color: #52797b;
+    }
+
+    .filter-input {
+        width: 100%;
+        padding: 0.6rem 0.9rem;
+        border: 1px solid #d4e5e5;
+        border-radius: 8px;
+        font-size: 0.9rem;
+        color: #0c2e30;
+        background: #f8fafc;
+        transition: border-color 0.2s, background 0.2s;
+    }
+
+    .filter-input:focus {
+        outline: none;
+        border-color: #0d7377;
+        background: #ffffff;
+    }
+
+    .filter-actions {
+        display: flex;
+        align-items: flex-end;
+        gap: 0.5rem;
+        padding-top: 1.35rem;
+    }
+
+    /* ===== APPOINTMENTS TABLE ===== */
+    .table-container {
+        background: #ffffff;
+        border-radius: 14px;
+        border: 1px solid #d4e5e5;
+        box-shadow: 0 2px 10px rgba(6, 79, 82, 0.05);
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        margin-bottom: 2rem;
+        width: 100%;
+    }
+
+    .cq-table {
+        width: 100%;
+        border-collapse: collapse;
+        text-align: left;
+        min-width: 680px;
+    }
+
+    .cq-table th {
+        background: #f0f5f5;
+        color: #064f52;
+        font-size: 0.78rem;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        padding: 0.9rem 1rem;
+        border-bottom: 2px solid #d4e5e5;
+        white-space: nowrap;
+    }
+
+    .cq-table td {
+        padding: 1rem;
+        border-bottom: 1px solid #eef4f4;
+        font-size: 0.88rem;
+        color: #0c2e30;
+        vertical-align: middle;
+    }
+
+    .cq-table tr:hover {
+        background: #f8fafc;
+    }
+
+    .token-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.3rem;
+        background: #e6f5f5;
+        color: #064f52;
+        font-weight: 800;
+        font-size: 0.95rem;
+        padding: 0.35rem 0.75rem;
+        border-radius: 6px;
+        border: 1px solid #b2dede;
+        letter-spacing: -0.01em;
+    }
+
+    .doctor-meta {
+        font-weight: 700;
+        color: #064f52;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .doctor-dept {
+        font-size: 0.76rem;
+        color: #52797b;
+        font-weight: 500;
+    }
+
+    .datetime-meta {
+        display: flex;
+        flex-direction: column;
+        gap: 0.15rem;
+    }
+
+    .datetime-date {
+        font-weight: 600;
+        color: #0c2e30;
+    }
+
+    .datetime-time {
+        font-size: 0.76rem;
+        color: #52797b;
+    }
+
+    .symptoms-text {
+        max-width: 180px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        color: #52797b;
+        font-size: 0.82rem;
+    }
+
+    /* ===== EMPTY STATE ===== */
+    .history-empty-state {
+        background: #ffffff;
+        border-radius: 14px;
+        border: 2px dashed #d4e5e5;
+        padding: 3.5rem 1.5rem;
+        text-align: center;
+        box-shadow: 0 2px 10px rgba(6, 79, 82, 0.05);
+    }
+
+    .history-empty-icon {
+        width: 70px;
+        height: 70px;
+        background: #e6f5f5;
+        color: #0d7377;
+        border-radius: 50%;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.8rem;
+        margin-bottom: 1.25rem;
+    }
+
+    .history-empty-state h2 {
+        font-size: 1.35rem;
+        color: #064f52;
+        font-weight: 700;
+        margin: 0 0 0.5rem;
+    }
+
+    .history-empty-state p {
+        color: #52797b;
+        font-size: 0.95rem;
+        max-width: 440px;
+        margin: 0 auto 1.5rem;
+    }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 900px) {
+        .history-page {
+            grid-template-columns: 1fr;
+        }
+
+        .history-sidebar {
+            position: static;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.4rem;
+            padding: 1rem;
+        }
+
+        .history-sidebar .sidebar-brand {
+            width: 100%;
+            margin-bottom: 0.75rem;
+            padding-bottom: 0.75rem;
+        }
+
+        .history-sidebar a {
+            padding: 0.5rem 0.75rem;
+            font-size: 0.82rem;
+        }
+    }
+
+    @media (max-width: 600px) {
+        .filter-form {
+            flex-direction: column;
+            align-items: stretch;
+        }
+
+        .filter-actions {
+            padding-top: 0;
+            width: 100%;
+            display: flex;
+            justify-content: flex-end;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="history-page">
+
+    <!-- Sidebar Navigation -->
+    <nav class="history-sidebar">
+        <div class="sidebar-brand">
+            <i class="fa-solid fa-hospital"></i>
+            <span>CareQueue</span>
+        </div>
+        <a href="{% url 'patient_dashboard' %}">
+            <i class="fa-solid fa-gauge-high"></i> Dashboard
+        </a>
+        <a href="{% url 'queue_position' %}">
+            <i class="fa-solid fa-list-ol"></i> Live Queue
+        </a>
+        <a href="{% url 'view_token' %}">
+            <i class="fa-solid fa-ticket"></i> View My Token
+        </a>
+        <a href="{% url 'appointment_history' %}" class="active">
+            <i class="fa-solid fa-clock-rotate-left"></i> My History
+        </a>
+        <a href="{% url 'book_appointment' %}">
+            <i class="fa-solid fa-calendar-plus"></i> Book Appointment
+        </a>
+        <a href="{% url 'patient_logout' %}">
+            <i class="fa-solid fa-right-from-bracket"></i> Logout
+        </a>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="history-content">
+        
+        <!-- Header -->
+        <header class="history-header">
+            <div class="history-header-title">
+                <h1>
+                    <i class="fa-solid fa-clock-rotate-left"></i>
+                    My Appointment History
+                </h1>
+                <p>
+                    {% if patient_name %}
+                        Patient: <strong>{{ patient_name }}</strong> &bull; Complete consultation records &amp; issued tokens
+                    {% else %}
+                        Consultation records &amp; token history
+                    {% endif %}
+                </p>
+            </div>
+            <div>
+                <a href="{% url 'book_appointment' %}" class="cq-btn cq-btn-primary">
+                    <i class="fa-solid fa-calendar-plus"></i> New Appointment
+                </a>
+            </div>
+        </header>
+
+        <!-- Search & Filter Card -->
+        <div class="filter-card">
+            <form method="get" action="{% url 'appointment_history' %}" class="filter-form">
+                
+                <div class="filter-group">
+                    <label for="search-input"><i class="fa-solid fa-magnifying-glass"></i> Search</label>
+                    <input type="text" id="search-input" name="search" value="{{ search_query }}" 
+                           placeholder="Search by doctor or token #..." class="filter-input">
+                </div>
+
+                <div class="filter-group">
+                    <label for="status-filter"><i class="fa-solid fa-filter"></i> Status Filter</label>
+                    <select id="status-filter" name="status" class="filter-input">
+                        <option value="">All Statuses</option>
+                        {% for st in status_choices %}
+                            <option value="{{ st }}" {% if status_filter == st %}selected{% endif %}>{{ st }}</option>
+                        {% empty %}
+                            <option value="Pending" {% if status_filter == 'Pending' %}selected{% endif %}>Pending</option>
+                            <option value="Completed" {% if status_filter == 'Completed' %}selected{% endif %}>Completed</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="filter-actions">
+                    <button type="submit" class="cq-btn cq-btn-primary">
+                        <i class="fa-solid fa-filter"></i> Apply
+                    </button>
+                    {% if search_query or status_filter %}
+                        <a href="{% url 'appointment_history' %}" class="cq-btn cq-btn-outline" title="Reset Filters">
+                            <i class="fa-solid fa-xmark"></i> Clear
+                        </a>
+                    {% endif %}
+                </div>
+
+            </form>
+        </div>
+
+        {% if appointments %}
+        <!-- Responsive Table Container -->
+        <div class="table-container">
+            <table class="cq-table">
+                <thead>
+                    <tr>
+                        <th>Token #</th>
+                        <th>Appt ID</th>
+                        <th>Doctor / Specialty</th>
+                        <th>Date &amp; Time</th>
+                        <th>Priority</th>
+                        <th>Status</th>
+                        <th>Symptoms</th>
+                        <th>Booked On</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for appt in appointments %}
+                    <tr>
+                        <td>
+                            <span class="token-pill">
+                                <i class="fa-solid fa-ticket"></i> #{{ appt.token_number }}
+                            </span>
+                        </td>
+                        <td>
+                            <strong>#{{ appt.id }}</strong>
+                        </td>
+                        <td>
+                            <div class="doctor-meta">
+                                <span>{{ appt.doctor }}</span>
+                                <span class="doctor-dept">
+                                    {% if "kumar" in appt.doctor|lower %}
+                                        Cardiology / Orthopedics
+                                    {% elif "priya" in appt.doctor|lower %}
+                                        General Medicine / Derma
+                                    {% else %}
+                                        Specialist
+                                    {% endif %}
+                                </span>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="datetime-meta">
+                                <span class="datetime-date">{{ appt.appointment_date|date:"M d, Y" }}</span>
+                                <span class="datetime-time">{{ appt.appointment_time|time:"h:i A" }}</span>
+                            </div>
+                        </td>
+                        <td>
+                            {% if appt.priority|lower == 'high' %}
+                                <span class="cq-badge cq-badge-high">High</span>
+                            {% elif appt.priority|lower == 'medium' %}
+                                <span class="cq-badge cq-badge-medium">Medium</span>
+                            {% elif appt.priority|lower == 'low' %}
+                                <span class="cq-badge cq-badge-low">Standard</span>
+                            {% else %}
+                                <span class="cq-badge cq-badge-low">{{ appt.priority|default:"Normal" }}</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if appt.status|lower == 'pending' %}
+                                <span class="cq-badge cq-badge-pending">Waiting</span>
+                            {% elif appt.status|lower == 'in progress' or appt.status|lower == 'in consultation' %}
+                                <span class="cq-badge cq-badge-progress">In Consultation</span>
+                            {% elif appt.status|lower == 'completed' %}
+                                <span class="cq-badge cq-badge-completed">Completed</span>
+                            {% else %}
+                                <span class="cq-badge cq-badge-pending">{{ appt.status }}</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <span class="symptoms-text" title="{{ appt.symptoms }}">
+                                {{ appt.symptoms|default:"Not specified"|truncatechars:35 }}
+                            </span>
+                        </td>
+                        <td>
+                            <span style="font-size:0.8rem; color:#52797b;">
+                                {{ appt.created_at|date:"M d, Y"|default:"-" }}
+                            </span>
+                        </td>
+                        <td>
+                            <a href="{% url 'view_token' %}" class="cq-btn cq-btn-outline" style="padding:0.4rem 0.75rem; font-size:0.8rem;">
+                                <i class="fa-solid fa-ticket"></i> Token
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        {% else %}
+        <!-- Friendly Empty State -->
+        <div class="history-empty-state">
+            <div class="history-empty-icon">
+                <i class="fa-solid fa-calendar-xmark"></i>
+            </div>
+            <h2>No Appointments Found</h2>
+            {% if search_query or status_filter %}
+                <p>No appointments match your search criteria. Try modifying your search or clearing active filters.</p>
+                <a href="{% url 'appointment_history' %}" class="cq-btn cq-btn-outline" style="margin-bottom:1rem;">
+                    <i class="fa-solid fa-arrow-rotate-left"></i> Reset Filter
+                </a>
+            {% else %}
+                <p>You have not booked any appointments yet. Schedule your first consultation to receive a live queue token.</p>
+                <div style="display: flex; gap: 0.75rem; justify-content: center; flex-wrap: wrap;">
+                    <a href="{% url 'book_appointment' %}" class="cq-btn cq-btn-primary">
+                        <i class="fa-solid fa-calendar-plus"></i> Book Appointment Now
+                    </a>
+                    <a href="{% url 'patient_dashboard' %}" class="cq-btn cq-btn-outline">
+                        <i class="fa-solid fa-house"></i> Patient Dashboard
+                    </a>
+                </div>
+            {% endif %}
+        </div>
+        {% endif %}
+
+    </main>
+
+</div>
+{% endblock %}

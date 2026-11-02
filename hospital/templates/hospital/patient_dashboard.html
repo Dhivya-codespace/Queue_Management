@@ -1,0 +1,277 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Patient Dashboard — CareQueue{% endblock %}
+
+{% block extra_head %}
+<link rel="stylesheet" href="{% static 'css/queue.css' %}">
+<style>
+    .patient-dash-wrapper {
+        width: 100%;
+        max-width: 1280px;
+        margin: 0 auto;
+    }
+
+    .patient-welcome-banner {
+        background: linear-gradient(135deg, #064f52 0%, #087f7d 100%);
+        color: white;
+        border-radius: 18px;
+        padding: clamp(2rem, 4vw, 3rem) clamp(1.5rem, 4vw, 3rem);
+        margin-bottom: 2.25rem;
+        box-shadow: 0 10px 25px rgba(6, 79, 82, 0.12);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 1.5rem;
+    }
+
+    .welcome-text h1 {
+        font-size: clamp(1.75rem, 3.5vw, 2.5rem);
+        font-weight: 800;
+        margin-bottom: 0.5rem;
+        letter-spacing: -0.02em;
+    }
+
+    .welcome-text p {
+        font-size: clamp(1rem, 1.8vw, 1.15rem);
+        color: #d7eeee;
+        max-width: 600px;
+        margin: 0;
+    }
+
+    .welcome-badge {
+        background: rgba(255, 255, 255, 0.15);
+        backdrop-filter: blur(8px);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        padding: 0.6rem 1.25rem;
+        border-radius: 9999px;
+        font-size: 0.9rem;
+        font-weight: 700;
+        letter-spacing: 0.03em;
+        text-transform: uppercase;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    /* ACTION CARDS GRID */
+    .patient-actions-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 1.75rem;
+        margin-bottom: 2.5rem;
+    }
+
+    .action-card {
+        background: #ffffff;
+        border: 1px solid #cfe5e5;
+        border-radius: 16px;
+        padding: 2.25rem 2rem;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        transition: transform 0.25s ease, box-shadow 0.25s ease;
+        box-shadow: 0 4px 16px rgba(6, 79, 82, 0.05);
+    }
+
+    .action-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 12px 28px rgba(6, 79, 82, 0.12);
+        border-color: #0e8388;
+    }
+
+    .action-card-icon {
+        width: 56px;
+        height: 56px;
+        border-radius: 14px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 24px;
+        margin-bottom: 1.25rem;
+    }
+
+    .action-card:nth-child(1) .action-card-icon { background: #e6f7f7; color: #064f52; }
+    .action-card:nth-child(2) .action-card-icon { background: #e0f2fe; color: #0284c7; }
+    .action-card:nth-child(3) .action-card-icon { background: #fef3c7; color: #b45309; }
+    .action-card:nth-child(4) .action-card-icon { background: #f3e8ff; color: #7e22ce; }
+
+    .action-card h3 {
+        font-size: 1.35rem;
+        font-weight: 800;
+        color: #064f52;
+        margin-bottom: 0.5rem;
+    }
+
+    .action-card p {
+        font-size: 0.98rem;
+        color: #52797b;
+        line-height: 1.6;
+        margin-bottom: 1.75rem;
+    }
+
+    .action-card .cq-btn {
+        width: 100%;
+        padding: 0.75rem 1rem;
+        font-size: 0.98rem;
+    }
+
+    /* INFO ADVISORY BANNER */
+    .hospital-info-banner {
+        background: #ffffff;
+        border: 1px solid #cfe5e5;
+        border-radius: 16px;
+        padding: 1.75rem 2rem;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 1.5rem;
+        box-shadow: 0 4px 14px rgba(6, 79, 82, 0.04);
+    }
+
+    .info-banner-left {
+        display: flex;
+        align-items: center;
+        gap: 1.25rem;
+    }
+
+    .info-banner-icon {
+        width: 50px;
+        height: 50px;
+        border-radius: 12px;
+        background: #e6f5f5;
+        color: #064f52;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 22px;
+        flex-shrink: 0;
+    }
+
+    .info-banner-text h4 {
+        font-size: 1.15rem;
+        font-weight: 700;
+        color: #064f52;
+        margin-bottom: 0.25rem;
+    }
+
+    .info-banner-text p {
+        font-size: 0.95rem;
+        color: #52797b;
+        margin: 0;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="patient-dash-wrapper">
+
+    <!-- Welcome Header Banner -->
+    <div class="patient-welcome-banner">
+        <div class="welcome-text">
+            <div class="welcome-badge">
+                <i class="fa-solid fa-circle-check"></i> Patient Verified
+            </div>
+            <h1>Welcome, {{ patient_name|default:"Patient" }}</h1>
+            <p>
+                Manage your consultations, monitor live queue progression, and view your digital hospital passes in real time.
+            </p>
+        </div>
+        <div>
+            <a href="{% url 'patient_logout' %}" class="cq-btn cq-btn-outline" style="color:white; border-color:rgba(255,255,255,0.4); background:rgba(255,255,255,0.1);">
+                <i class="fa-solid fa-right-from-bracket"></i> Logout
+            </a>
+        </div>
+    </div>
+
+    <!-- Quick Action Cards Grid -->
+    <div class="patient-actions-grid">
+
+        <!-- 1. Book Appointment -->
+        <div class="action-card">
+            <div>
+                <div class="action-card-icon">
+                    <i class="fa-solid fa-calendar-plus"></i>
+                </div>
+                <h3>Book Appointment</h3>
+                <p>
+                    Submit your symptoms to our agentic AI assistant, receive doctor recommendations, and schedule your appointment.
+                </p>
+            </div>
+            <a href="{% url 'book_appointment' %}" class="cq-btn cq-btn-primary">
+                Book Consultation <i class="fa-solid fa-arrow-right"></i>
+            </a>
+        </div>
+
+        <!-- 2. Live Queue Position -->
+        <div class="action-card">
+            <div>
+                <div class="action-card-icon">
+                    <i class="fa-solid fa-list-ol"></i>
+                </div>
+                <h3>Live Queue Position</h3>
+                <p>
+                    Track your place in line live, view patients ahead, and get dynamic wait-time estimations for your assigned doctor.
+                </p>
+            </div>
+            <a href="{% url 'queue_position' %}" class="cq-btn cq-btn-primary">
+                Track Live Queue <i class="fa-solid fa-arrow-right"></i>
+            </a>
+        </div>
+
+        <!-- 3. View My Token -->
+        <div class="action-card">
+            <div>
+                <div class="action-card-icon">
+                    <i class="fa-solid fa-ticket"></i>
+                </div>
+                <h3>View My Token</h3>
+                <p>
+                    Access your official digital token pass with consultation time and print-ready card layout for OPD presentation.
+                </p>
+            </div>
+            <a href="{% url 'view_token' %}" class="cq-btn cq-btn-primary">
+                View Digital Pass <i class="fa-solid fa-arrow-right"></i>
+            </a>
+        </div>
+
+        <!-- 4. Appointment History -->
+        <div class="action-card">
+            <div>
+                <div class="action-card-icon">
+                    <i class="fa-solid fa-clock-rotate-left"></i>
+                </div>
+                <h3>Appointment History</h3>
+                <p>
+                    Review your complete records of past consultations, doctors seen, priority classifications, and past tokens.
+                </p>
+            </div>
+            <a href="{% url 'appointment_history' %}" class="cq-btn cq-btn-primary">
+                View Visit History <i class="fa-solid fa-arrow-right"></i>
+            </a>
+        </div>
+
+    </div>
+
+    <!-- Advisory Information Footer -->
+    <div class="hospital-info-banner">
+        <div class="info-banner-left">
+            <div class="info-banner-icon">
+                <i class="fa-solid fa-hospital"></i>
+            </div>
+            <div class="info-banner-text">
+                <h4>CareQueue Smart Hospital &bull; Gandhipuram, Coimbatore</h4>
+                <p>24/7 Emergency and Outpatient Services &bull; Helpline: +91 98765 43210</p>
+            </div>
+        </div>
+        <div>
+            <a href="{% url 'book_appointment' %}" class="cq-btn cq-btn-outline">
+                <i class="fa-solid fa-plus"></i> New Appointment
+            </a>
+        </div>
+    </div>
+
+</div>
+{% endblock %}

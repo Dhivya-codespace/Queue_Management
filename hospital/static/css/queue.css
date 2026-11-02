@@ -1,0 +1,403 @@
+/* =========================================================
+   CAREQUEUE HEALTHCARE SYSTEM - CORE QUEUE & TOKEN STYLES
+   Responsive, Mobile-First, Accessible, and Print-Optimized
+   ========================================================= */
+
+:root {
+    --cq-primary: #064f52;
+    --cq-primary-dark: #043638;
+    --cq-primary-light: #0d7377;
+    --cq-teal: #0e8388;
+    --cq-teal-light: #e6f5f5;
+    --cq-accent: #14b8a6;
+    --cq-accent-soft: #ccfbf1;
+    --cq-bg: #f0f5f5;
+    --cq-card-bg: #ffffff;
+    --cq-text-main: #0c2e30;
+    --cq-text-muted: #52797b;
+    --cq-border: #d4e5e5;
+    --cq-success: #059669;
+    --cq-warning: #d97706;
+    --cq-danger: #dc2626;
+    --cq-info: #0284c7;
+    --cq-radius-sm: 8px;
+    --cq-radius-md: 12px;
+    --cq-radius-lg: 16px;
+    --cq-shadow-sm: 0 1px 3px rgba(6, 79, 82, 0.08);
+    --cq-shadow-md: 0 4px 14px rgba(6, 79, 82, 0.10);
+    --cq-shadow-lg: 0 10px 25px rgba(6, 79, 82, 0.12);
+}
+
+/* === UNIVERSAL RESPONSIVE RESET & SCALING === */
+html {
+    box-sizing: border-box;
+    font-size: 16px;
+    -webkit-text-size-adjust: 100%;
+    scroll-behavior: smooth;
+}
+
+*, *::before, *::after {
+    box-sizing: inherit;
+}
+
+body {
+    background-color: var(--cq-bg);
+    color: var(--cq-text-main);
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    line-height: 1.5;
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+}
+
+/* Fluid responsive container */
+.cq-container {
+    width: 100%;
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: clamp(0.75rem, 2vw, 1.5rem);
+    padding-right: clamp(0.75rem, 2vw, 1.5rem);
+}
+
+/* === BADGES === */
+.cq-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.3rem 0.75rem;
+    border-radius: 9999px;
+    font-size: 0.78rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    line-height: 1;
+}
+
+.cq-badge-pending {
+    background: #fef3c7;
+    color: #92400e;
+    border: 1px solid #fde68a;
+}
+
+.cq-badge-progress,
+.cq-badge-consultation {
+    background: #e0f2fe;
+    color: #0369a1;
+    border: 1px solid #bae6fd;
+}
+
+.cq-badge-completed {
+    background: #d1fae5;
+    color: #065f46;
+    border: 1px solid #a7f3d0;
+}
+
+.cq-badge-high {
+    background: #fee2e2;
+    color: #991b1b;
+    border: 1px solid #fecaca;
+}
+
+.cq-badge-medium {
+    background: #ffedd5;
+    color: #9a3412;
+    border: 1px solid #fed7aa;
+}
+
+.cq-badge-low {
+    background: #f0fdf4;
+    color: #166534;
+    border: 1px solid #bbf7d0;
+}
+
+/* === BUTTONS === */
+.cq-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.65rem 1.25rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+    border-radius: var(--cq-radius-sm);
+    border: 1px solid transparent;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.2s ease-in-out;
+    line-height: 1.2;
+}
+
+.cq-btn-primary {
+    background: var(--cq-primary);
+    color: #ffffff;
+    border-color: var(--cq-primary);
+}
+
+.cq-btn-primary:hover {
+    background: var(--cq-primary-dark);
+    color: #ffffff;
+    box-shadow: var(--cq-shadow-sm);
+}
+
+.cq-btn-outline {
+    background: #ffffff;
+    color: var(--cq-primary);
+    border-color: var(--cq-border);
+}
+
+.cq-btn-outline:hover {
+    background: var(--cq-teal-light);
+    border-color: var(--cq-primary-light);
+    color: var(--cq-primary-dark);
+}
+
+.cq-btn-print {
+    background: #0284c7;
+    color: #ffffff;
+    border-color: #0284c7;
+}
+
+.cq-btn-print:hover {
+    background: #0369a1;
+    color: #ffffff;
+}
+
+/* === PRINT TOKEN PASS STYLES === */
+.token-pass-wrapper {
+    width: 100%;
+    max-width: 680px;
+    margin: 1.5rem auto;
+}
+
+.token-pass-card {
+    background: var(--cq-card-bg);
+    border-radius: var(--cq-radius-lg);
+    border: 2px solid var(--cq-border);
+    box-shadow: var(--cq-shadow-md);
+    overflow: hidden;
+    position: relative;
+}
+
+.token-pass-header {
+    background: linear-gradient(135deg, var(--cq-primary) 0%, var(--cq-primary-light) 100%);
+    color: #ffffff;
+    padding: 1.5rem clamp(1rem, 4vw, 2rem);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.token-pass-brand {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.token-pass-brand i {
+    font-size: 1.8rem;
+    color: var(--cq-accent);
+}
+
+.token-pass-title {
+    font-size: 1.35rem;
+    font-weight: 800;
+    margin: 0;
+    line-height: 1.2;
+}
+
+.token-pass-subtitle {
+    font-size: 0.8rem;
+    color: #ccfbf1;
+    margin: 0;
+}
+
+.token-pass-tag {
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(4px);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    padding: 0.35rem 0.85rem;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+}
+
+.token-display-box {
+    background: var(--cq-teal-light);
+    border-bottom: 2px dashed var(--cq-border);
+    padding: 1.75rem clamp(1rem, 4vw, 2rem);
+    text-align: center;
+    position: relative;
+}
+
+.token-label {
+    font-size: 0.85rem;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--cq-primary);
+    margin-bottom: 0.25rem;
+}
+
+.token-huge-number {
+    font-size: clamp(3rem, 10vw, 4.75rem);
+    font-weight: 900;
+    color: var(--cq-primary-dark);
+    line-height: 1;
+    margin: 0.25rem 0 0.75rem;
+    letter-spacing: -0.03em;
+}
+
+.token-meta-badges {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.token-details-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 1.25rem;
+    padding: 1.75rem clamp(1rem, 4vw, 2rem);
+}
+
+.token-detail-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+}
+
+.token-detail-label {
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--cq-text-muted);
+}
+
+.token-detail-val {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--cq-text-main);
+    word-break: break-word;
+}
+
+.token-detail-val.highlight {
+    color: var(--cq-primary);
+    font-weight: 700;
+}
+
+.token-pass-footer {
+    background: #f8fafc;
+    border-top: 1px solid var(--cq-border);
+    padding: 1.25rem clamp(1rem, 4vw, 2rem);
+    font-size: 0.8rem;
+    color: var(--cq-text-muted);
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.token-pass-footer i {
+    font-size: 1.25rem;
+    color: var(--cq-primary-light);
+    flex-shrink: 0;
+}
+
+.token-actions-bar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    margin-top: 1.5rem;
+}
+
+/* === PRINT-ONLY RULES === */
+@media print {
+    /* Hide everything except the printable token pass */
+    body * {
+        visibility: hidden;
+    }
+
+    .cq-navbar,
+    .no-print,
+    .token-actions-bar,
+    .sidebar,
+    .queue-sidebar,
+    header,
+    footer,
+    nav {
+        display: none !important;
+        visibility: hidden !important;
+    }
+
+    .printable-token-area,
+    .printable-token-area * {
+        visibility: visible;
+    }
+
+    .printable-token-area {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100% !important;
+        max-width: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        box-shadow: none !important;
+    }
+
+    .token-pass-card {
+        border: 2px solid #000000 !important;
+        box-shadow: none !important;
+        page-break-inside: avoid;
+        margin: 0 auto;
+        max-width: 600px;
+    }
+
+    .token-pass-header {
+        background: #064f52 !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+        color: #ffffff !important;
+    }
+
+    .token-display-box {
+        background: #e6f5f5 !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+    }
+
+    .token-huge-number {
+        color: #064f52 !important;
+    }
+}
+
+/* === RESPONSIVE UTILITIES === */
+@media (max-width: 640px) {
+    .token-pass-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .token-details-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+
+    .token-actions-bar {
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .token-actions-bar .cq-btn {
+        width: 100%;
+    }
+}

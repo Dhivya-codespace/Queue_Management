@@ -1,0 +1,192 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}CareQueue - Hospital Queue System{% endblock %}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <style>
+        /* === BASE RESET & RESPONSIVE FOUNDATION === */
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            font-size: 16px;
+            -webkit-text-size-adjust: 100%;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', Arial, Helvetica, sans-serif;
+            background: #f0f5f5;
+            color: #083f43;
+            min-height: 100vh;
+            line-height: 1.6;
+            width: 100%;
+            overflow-x: hidden;
+        }
+
+        /* === NAVBAR === */
+        .cq-navbar {
+            background: #064f52;
+            padding: 0 clamp(1.25rem, 4vw, 3.5rem);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            min-height: 70px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.12);
+            width: 100%;
+        }
+
+        .cq-navbar .logo-area {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            text-decoration: none;
+            color: white;
+        }
+
+        .cq-navbar .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: rgba(255,255,255,0.18);
+            border-radius: 10px;
+            display: grid;
+            place-items: center;
+            font-size: 1.25rem;
+            color: #62ddd7;
+        }
+
+        .cq-navbar .logo-text {
+            font-size: 1.3rem;
+            font-weight: 800;
+            color: white;
+            letter-spacing: -0.02em;
+        }
+
+        .cq-navbar .logo-text span {
+            color: #62ddd7;
+        }
+
+        .cq-navbar .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 1.75rem;
+        }
+
+        .cq-navbar .nav-links a {
+            color: #d7eeee;
+            text-decoration: none;
+            font-size: 0.98rem;
+            font-weight: 600;
+            transition: color 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .cq-navbar .nav-links a:hover {
+            color: #62ddd7;
+        }
+
+        /* Hamburger for mobile */
+        .cq-navbar .nav-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 0.35rem;
+        }
+
+        /* === MAIN CONTENT CONTAINER === */
+        .cq-main {
+            width: 100%;
+            max-width: 1350px;
+            margin: 1.75rem auto 3rem;
+            padding: 0 clamp(1rem, 3vw, 2.5rem);
+            min-height: calc(100vh - 140px);
+        }
+
+        /* === RESPONSIVE MEDIA QUERIES === */
+        @media (max-width: 900px) {
+            .cq-navbar {
+                padding: 0.75rem 1.25rem;
+                flex-wrap: wrap;
+                min-height: auto;
+            }
+
+            .cq-navbar .nav-toggle {
+                display: block;
+            }
+
+            .cq-navbar .nav-links {
+                display: none;
+                width: 100%;
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.85rem;
+                padding: 1rem 0 0.5rem;
+            }
+
+            .cq-navbar .nav-links.open {
+                display: flex;
+            }
+
+            .cq-navbar .nav-links a {
+                padding: 0.4rem 0;
+                font-size: 1.05rem;
+            }
+
+            .cq-main {
+                margin: 1.25rem auto 2rem;
+                padding: 0 1rem;
+            }
+        }
+    </style>
+    {% block extra_head %}{% endblock %}
+</head>
+<body>
+<nav class="cq-navbar">
+    <a class="logo-area" href="{% url 'home' %}">
+        <div class="logo-icon"><i class="fa-solid fa-hospital"></i></div>
+        <div class="logo-text">Care<span>Queue</span></div>
+    </a>
+    <button class="nav-toggle" onclick="document.querySelector('.nav-links').classList.toggle('open')" aria-label="Toggle navigation">
+        <i class="fa-solid fa-bars"></i>
+    </button>
+    <div class="nav-links">
+        {% if request.session.patient_name %}
+            <a href="{% url 'patient_dashboard' %}"><i class="fa-solid fa-gauge-high"></i> Dashboard</a>
+            <a href="{% url 'queue_position' %}"><i class="fa-solid fa-list-ol"></i> Live Queue</a>
+            <a href="{% url 'view_token' %}"><i class="fa-solid fa-ticket"></i> View Token</a>
+            <a href="{% url 'appointment_history' %}"><i class="fa-solid fa-clock-rotate-left"></i> History</a>
+            <a href="{% url 'patient_logout' %}"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
+        {% elif request.session.doctor_name %}
+            <a href="{% url 'doctor_dashboard' %}"><i class="fa-solid fa-gauge-high"></i> Dashboard</a>
+            <a href="{% url 'doctor_appointments' %}"><i class="fa-solid fa-calendar-check"></i> Appointments</a>
+            <a href="{% url 'doctor_logout' %}"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
+        {% else %}
+            <a href="{% url 'patient_login' %}"><i class="fa-solid fa-user"></i> Patient Login</a>
+            <a href="{% url 'doctor_login' %}"><i class="fa-solid fa-user-doctor"></i> Doctor Login</a>
+        {% endif %}
+        <a href="{% url 'about' %}">About</a>
+        <a href="{% url 'contact' %}">Contact</a>
+    </div>
+</nav>
+<div class="cq-main">
+    {% block content %}{% endblock %}
+</div>
+{% block extra_scripts %}{% endblock %}
+</body>
+</html>

@@ -1,0 +1,905 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="referrer" content="strict-origin-when-cross-origin">
+    <title>Appointment Success | CareQueue Hospital</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Inter, Arial, sans-serif;
+            background: #f0f7f7;
+            color: #083f43;
+            font-size: 16px;
+            line-height: 1.6;
+        }
+
+        .page {
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1600px;
+            margin: auto;
+            background: white;
+            border: 1px solid #dfe8e8;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,70,70,.08);
+        }
+
+        .navbar {
+            min-height: 76px;
+            background: #064f52;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 16px;
+            padding: 18px 30px;
+            color: white;
+        }
+
+        .logo-area, .nav-links {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 14px;
+        }
+
+        .logo-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 10px;
+            background: #08777b;
+            display: grid;
+            place-items: center;
+            font-size: 22px;
+        }
+
+        .logo-text {
+            font-size: clamp(18px, 1.5vw, 24px);
+            font-weight: 800;
+        }
+
+        .nav-links {
+            gap: 24px;
+        }
+
+        .nav-links a {
+            color: #e2f5f4;
+            text-decoration: none;
+            font-size: 15px;
+            font-weight: 700;
+        }
+
+        .nav-links a:hover {
+            color: white;
+            text-decoration: underline;
+        }
+
+        .content {
+            padding: clamp(18px, 3vw, 40px);
+        }
+
+        .success-banner {
+            background: linear-gradient(120deg, #07585a, #087b7c);
+            border-radius: 14px;
+            padding: clamp(20px, 3vw, 34px);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 22px;
+            color: white;
+            margin-bottom: 26px;
+        }
+
+        .success-left {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+        }
+
+        .success-icon {
+            width: 64px;
+            height: 64px;
+            flex-shrink: 0;
+            border-radius: 50%;
+            background: white;
+            display: grid;
+            place-items: center;
+            color: #078b87;
+            font-size: 30px;
+        }
+
+        .success-title {
+            font-size: clamp(22px, 2.2vw, 32px);
+            font-weight: 800;
+            margin-bottom: 8px;
+        }
+
+        .success-description {
+            font-size: 15px;
+            color: #e0f4f3;
+        }
+
+        .hospital-logo {
+            text-align: center;
+            font-weight: 800;
+        }
+
+        .hospital-cross {
+            font-size: 42px;
+            line-height: 1.1;
+        }
+
+        .queue-section {
+            border: 1px solid #dce7e7;
+            border-radius: 14px;
+            padding: clamp(18px, 2.5vw, 32px);
+        }
+
+        .section-title, .location-title {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 22px;
+        }
+
+        .section-icon, .location-icon {
+            width: 46px;
+            height: 46px;
+            flex-shrink: 0;
+            border-radius: 10px;
+            display: grid;
+            place-items: center;
+            font-size: 20px;
+        }
+
+        .section-icon {
+            background: #07585a;
+            color: white;
+        }
+
+        .location-icon {
+            background: #e8f5f4;
+            color: #07585a;
+        }
+
+        .section-title h2, .location-title h2 {
+            font-size: clamp(20px, 1.8vw, 26px);
+            font-weight: 800;
+        }
+
+        .queue-cards {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 18px;
+        }
+
+        .queue-card {
+            min-width: 0;
+            min-height: 180px;
+            padding: 22px 14px;
+            border: 1px solid #cde5e5;
+            background: linear-gradient(145deg, #f5fbfb, #edf8f7);
+            border-radius: 12px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+        .queue-card-icon {
+            font-size: 29px;
+            color: #07585a;
+            margin-bottom: 12px;
+        }
+
+        .card-label {
+            font-size: 14px;
+            color: #19585b;
+            margin-bottom: 8px;
+        }
+
+        .card-value {
+            font-size: clamp(22px, 2vw, 30px);
+            font-weight: 800;
+            color: #07585a;
+            overflow-wrap: anywhere;
+        }
+
+        .card-badge {
+            margin-top: 12px;
+            padding: 6px 12px;
+            background: #d8eeee;
+            border-radius: 20px;
+            font-size: 12px;
+        }
+
+        .divider {
+            height: 1px;
+            background: #dfe7e7;
+            margin: 30px 0;
+        }
+
+        .location-layout {
+            display: grid;
+            grid-template-columns: minmax(0, 1.6fr) minmax(300px, 1fr);
+            gap: 22px;
+            align-items: start;
+        }
+
+        .map-column {
+            min-width: 0;
+        }
+
+        #map {
+            height: clamp(350px, 45vw, 600px);
+            width: 100%;
+            border: 1px solid #d5e3e3;
+            border-radius: 12px;
+            background: #eef3f2;
+            z-index: 1;
+        }
+
+        .map-note {
+            font-size: 13px;
+            color: #557173;
+            margin-top: 10px;
+        }
+
+        .map-links {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .map-links a {
+            font-size: 14px;
+            color: #07585a;
+            font-weight: 700;
+        }
+
+        .location-info {
+            display: flex;
+            flex-direction: column;
+            gap: 13px;
+            min-width: 0;
+        }
+
+        .info-card {
+            min-height: 82px;
+            border: 1px solid #d4e7e7;
+            border-radius: 11px;
+            background: #fbfefe;
+            padding: 16px;
+            display: flex;
+            align-items: center;
+            gap: 13px;
+            min-width: 0;
+        }
+
+        .info-icon {
+            width: 42px;
+            height: 42px;
+            flex-shrink: 0;
+            border-radius: 50%;
+            background: #e7f4f3;
+            display: grid;
+            place-items: center;
+            color: #07585a;
+            font-size: 18px;
+        }
+
+        .info-content {
+            min-width: 0;
+        }
+
+        .info-label {
+            font-size: 13px;
+            color: #537174;
+            margin-bottom: 5px;
+        }
+
+        .info-value {
+            font-size: 15px;
+            font-weight: 800;
+            color: #07585a;
+            overflow-wrap: anywhere;
+        }
+
+        .green-value { color: #0b9860; }
+        .orange-value { color: #b85a0a; }
+
+        .info-small {
+            font-size: 12px;
+            color: #6b8585;
+            margin-top: 5px;
+        }
+
+        .notification-box, .processing {
+            margin-top: 22px;
+            padding: 20px;
+            border-radius: 11px;
+        }
+
+        .notification-box {
+            border: 1px solid #b9d9f5;
+            background: #f1f8ff;
+        }
+
+        .notification-title {
+            font-size: 16px;
+            font-weight: 800;
+            margin-bottom: 8px;
+        }
+
+        .notification-message {
+            font-size: 14px;
+            color: #315f63;
+        }
+
+        .processing {
+            border: 1px solid #a9ded1;
+            background: #effbf6;
+            display: flex;
+            gap: 16px;
+            align-items: center;
+        }
+
+        .processing-icon {
+            font-size: 32px;
+            color: #07585a;
+            flex-shrink: 0;
+        }
+
+        .processing h3 {
+            font-size: 17px;
+            margin-bottom: 6px;
+        }
+
+        .processing p {
+            font-size: 14px;
+            color: #397071;
+        }
+
+        .home-button-area {
+            display: flex;
+            justify-content: center;
+            gap: 14px;
+            flex-wrap: wrap;
+            margin-top: 26px;
+        }
+
+        .home-button {
+            border: 0;
+            background: #08777a;
+            color: white;
+            padding: 13px 20px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 800;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .home-button:hover {
+            background: #07585a;
+        }
+
+        .footer {
+            border-top: 1px solid #e0e7e7;
+            padding: 22px;
+            text-align: center;
+            font-size: 13px;
+            color: #718080;
+        }
+
+        .leaflet-container {
+            font-family: Inter, Arial, sans-serif;
+        }
+
+        .map-error {
+            padding: 14px;
+            margin-top: 10px;
+            background: #fff4e5;
+            color: #754c00;
+            border: 1px solid #f1d09a;
+            border-radius: 8px;
+            font-size: 14px;
+            display: none;
+        }
+
+        @media (max-width: 1050px) {
+            .location-layout {
+                grid-template-columns: minmax(0, 1fr);
+            }
+
+            .queue-cards {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
+
+        @media (max-width: 650px) {
+            .page { padding: 8px; }
+            .container { border-radius: 10px; }
+            .navbar { padding: 15px; }
+            .nav-links { gap: 14px; }
+            .nav-links a { font-size: 13px; }
+            .content { padding: 12px; }
+            .queue-section { padding: 14px; }
+
+            .queue-cards {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+                gap: 10px;
+            }
+
+            .queue-card {
+                min-height: 145px;
+                padding: 15px 8px;
+            }
+
+            .success-banner { padding: 16px; }
+            .success-icon {
+                width: 48px;
+                height: 48px;
+                font-size: 23px;
+            }
+
+            .hospital-logo { display: none; }
+            #map { height: 340px; }
+            .home-button { width: 100%; }
+        }
+
+        @media print {
+            body, .page {
+                background: white;
+                padding: 0;
+            }
+
+            .container {
+                max-width: none;
+                border: 0;
+                box-shadow: none;
+            }
+
+            .navbar, .home-button-area, .footer {
+                display: none;
+            }
+
+            .content { padding: 12px; }
+            #map { height: 300px; }
+        }
+    </style>
+</head>
+
+<body>
+<div class="page">
+    <div class="container">
+
+        <nav class="navbar">
+            <div class="logo-area">
+                <div class="logo-icon"><i class="fa-solid fa-hospital"></i></div>
+                <div class="logo-text">Smart hospital queue</div>
+            </div>
+
+            <div class="nav-links">
+                <a href="/">Home</a>
+                <a href="/#about">About</a>
+                <a href="/#contact">Contact</a>
+            </div>
+        </nav>
+
+        <main class="content">
+            <section class="success-banner">
+                <div class="success-left">
+                    <div class="success-icon"><i class="fa-solid fa-check"></i></div>
+                    <div>
+                        <div class="success-title">Appointment Booked Successfully!</div>
+                        <div class="success-description">
+                            Your appointment has been confirmed and processed by our AI system.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="hospital-logo">
+                    <div class="hospital-cross">+</div>
+                    CareWell<br>HOSPITAL
+                </div>
+            </section>
+
+            <section class="queue-section">
+                <div class="section-title">
+                    <div class="section-icon"><i class="fa-solid fa-robot"></i></div>
+                    <h2>AI Queue Decision</h2>
+                </div>
+
+                <div class="queue-cards">
+                    <div class="queue-card">
+                        <div class="queue-card-icon"><i class="fa-regular fa-heart"></i></div>
+                        <div class="card-label">Risk Score</div>
+                        <div class="card-value">{{ risk_score|default:"0" }}</div>
+                        <div class="card-badge">
+                            {% if risk_score >= 70 %}
+                                High Risk
+                            {% elif risk_score >= 40 %}
+                                Moderate Risk
+                            {% else %}
+                                Low Risk
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="queue-card">
+                        <div class="queue-card-icon"><i class="fa-regular fa-star"></i></div>
+                        <div class="card-label">Priority</div>
+                        <div class="card-value">{{ priority|default:"Pending" }}</div>
+                        <div class="card-badge">AI Decision</div>
+                    </div>
+
+                    <div class="queue-card">
+                        <div class="queue-card-icon"><i class="fa-solid fa-ticket"></i></div>
+                        <div class="card-label">Token Number</div>
+                        <div class="card-value">{{ token_number|default:"—" }}</div>
+                        <div class="card-badge">Your Queue Number</div>
+                    </div>
+
+                    <div class="queue-card">
+                        <div class="queue-card-icon"><i class="fa-regular fa-clock"></i></div>
+                        <div class="card-label">Estimated Wait</div>
+                        <div class="card-value">
+                            {% if estimated_wait_time > 0 %}
+                                {{ estimated_wait_time }} min
+                            {% else %}
+                                Your Turn
+                            {% endif %}
+                        </div>
+                        <div class="card-badge">
+                            {{ patients_before|default:"0" }} patients before you
+                        </div>
+                    </div>
+                </div>
+
+                <div class="divider"></div>
+
+                <div class="location-title">
+                    <div class="location-icon"><i class="fa-solid fa-location-dot"></i></div>
+                    <h2>Patient Location Tracking</h2>
+                </div>
+
+                <div class="location-layout">
+                    <div class="map-column">
+                        <div id="map" aria-label="Map showing patient and hospital locations"></div>
+
+                        <div id="map-error" class="map-error">
+                            Map tiles could not be loaded. You can still open the hospital location
+                            in OpenStreetMap using the link below.
+                        </div>
+
+                        <div class="map-links">
+                            <p class="map-note">
+                                <i class="fa-solid fa-circle-info"></i>
+                                Blue marker: patient GPS location. Teal marker: CareQueue Hospital,
+                                Gandhipuram, Coimbatore. Distance is straight-line distance.
+                            </p>
+
+                            <a href="https://www.openstreetmap.org/?mlat=11.0168&mlon=76.9558#map=14/11.0168/76.9558"
+                               target="_blank" rel="noopener noreferrer">
+                                <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                                Open in OpenStreetMap
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="location-info">
+                        <div class="info-card">
+                            <div class="info-icon"><i class="fa-solid fa-location-dot"></i></div>
+                            <div class="info-content">
+                                <div class="info-label">Patient GPS Coordinates</div>
+                                <div class="info-value" id="patient-coordinates">
+                                    {% if patient_latitude != None and patient_longitude != None %}
+                                        {{ patient_latitude }}, {{ patient_longitude }}
+                                    {% else %}
+                                        Location not captured
+                                    {% endif %}
+                                </div>
+                                <div class="info-small" id="patient-location-status">
+                                    {% if patient_latitude != None and patient_longitude != None %}
+                                        GPS coordinates received
+                                    {% else %}
+                                        Please allow location access during booking
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="info-card">
+                            <div class="info-icon"><i class="fa-solid fa-hospital"></i></div>
+                            <div class="info-content">
+                                <div class="info-label">Hospital Location</div>
+                                <div class="info-value">CareQueue Hospital, Gandhipuram</div>
+                                <div class="info-small">
+                                    Coimbatore, Tamil Nadu · GPS: 11.016800, 76.955800
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="info-card">
+                            <div class="info-icon"><i class="fa-solid fa-route"></i></div>
+                            <div class="info-content">
+                                <div class="info-label">Straight-line Distance</div>
+                                <div class="info-value green-value">
+                                    {% if distance_km != None %}
+                                        {{ distance_km }} km
+                                    {% else %}
+                                        Unavailable
+                                    {% endif %}
+                                </div>
+                                <div class="info-small">
+                                    Calculated using Haversine, not road distance.
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="info-card">
+                            <div class="info-icon"><i class="fa-regular fa-clock"></i></div>
+                            <div class="info-content">
+                                <div class="info-label">Estimated Transit Time</div>
+                                <div class="info-value orange-value">
+                                    {% if estimated_time != None %}
+                                        ~{{ estimated_time }} minutes
+                                    {% else %}
+                                        Unavailable
+                                    {% endif %}
+                                </div>
+                                <div class="info-small">
+                                    This is not live traffic information.
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="info-card">
+                            <div class="info-icon"><i class="fa-solid fa-user-doctor"></i></div>
+                            <div class="info-content">
+                                <div class="info-label">Doctor Availability</div>
+                                {% if doctor_available %}
+                                    <div class="info-value green-value">Available</div>
+                                    <div class="info-small">
+                                        Doctor availability reported by the application.
+                                    </div>
+                                {% else %}
+                                    <div class="info-value">Not confirmed</div>
+                                    <div class="info-small">
+                                        Please confirm availability with the hospital.
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="notification-box">
+                    <div class="notification-title">
+                        <i class="fa-regular fa-bell"></i> Smart Queue Notification
+                    </div>
+                    <div class="notification-message">
+                        {{ notification_message|default:"Your appointment details are available above. Please arrive on time." }}
+                    </div>
+                </div>
+
+                <div class="processing">
+                    <div class="processing-icon"><i class="fa-solid fa-shield-halved"></i></div>
+                    <div>
+                        <h3>AI Processing Complete</h3>
+                        <p>
+                            Your appointment has been processed by the queue system.
+                            Please follow the hospital's instructions for your appointment.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="home-button-area">
+                    <a href="{% url 'queue_position' %}" class="home-button">
+                        <i class="fa-solid fa-list-ol"></i> Live Queue Position
+                    </a>
+
+                    <a href="{% url 'view_token' %}" class="home-button">
+                        <i class="fa-solid fa-ticket"></i> View My Token
+                    </a>
+
+                    <a href="{% url 'appointment_history' %}" class="home-button">
+                        <i class="fa-solid fa-clock-rotate-left"></i> My History
+                    </a>
+
+                    <a href="{% url 'home' %}" class="home-button">
+                        <i class="fa-solid fa-house"></i> Go to Home
+                    </a>
+                </div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <i class="fa-solid fa-lock"></i>
+            Thank you for choosing CareWell Hospital. Wishing you good health!
+        </footer>
+    </div>
+</div>
+
+{{ patient_latitude|json_script:"patient-latitude-data" }}
+{{ patient_longitude|json_script:"patient-longitude-data" }}
+
+<script>
+(function () {
+    const hospitalLat = 11.0168;
+    const hospitalLng = 76.9558;
+
+    const mapElement = document.getElementById("map");
+    const mapError = document.getElementById("map-error");
+
+    function readJsonScript(id) {
+        try {
+            const element = document.getElementById(id);
+            return element ? JSON.parse(element.textContent) : null;
+        } catch (error) {
+            console.error("Could not read location data:", error);
+            return null;
+        }
+    }
+
+    if (typeof L === "undefined") {
+        mapError.style.display = "block";
+        mapError.textContent =
+            "The Leaflet map library did not load. Check your internet connection and reload this page.";
+        return;
+    }
+
+    const patientLat = readJsonScript("patient-latitude-data");
+    const patientLng = readJsonScript("patient-longitude-data");
+
+    const hospitalPin = L.divIcon({
+        className: "custom-hospital-pin",
+        html: '<div style="background:#07585a;color:white;width:40px;height:40px;border-radius:50% 50% 50% 0;transform:rotate(-45deg);display:flex;align-items:center;justify-content:center;box-shadow:0 4px 14px rgba(7,88,90,.35);border:2px solid white"><i class="fa-solid fa-hospital" style="transform:rotate(45deg);font-size:18px"></i></div>',
+        iconSize: [40, 40],
+        iconAnchor: [20, 40],
+        popupAnchor: [0, -40]
+    });
+
+    const patientPin = L.divIcon({
+        className: "custom-patient-pin",
+        html: '<div style="background:#0e86d4;color:white;width:40px;height:40px;border-radius:50% 50% 50% 0;transform:rotate(-45deg);display:flex;align-items:center;justify-content:center;box-shadow:0 4px 14px rgba(14,134,212,.4);border:2px solid white"><i class="fa-solid fa-user" style="transform:rotate(45deg);font-size:16px"></i></div>',
+        iconSize: [40, 40],
+        iconAnchor: [20, 40],
+        popupAnchor: [0, -40]
+    });
+
+    let map;
+
+    try {
+        map = L.map("map", {
+            zoomControl: true,
+            scrollWheelZoom: true
+        }).setView([hospitalLat, hospitalLng], 13);
+
+        const tileLayer = L.tileLayer(
+            "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
+            {
+                maxZoom: 19,
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+                referrerPolicy: "strict-origin-when-cross-origin"
+            }
+        );
+
+        tileLayer.on("tileerror", function (event) {
+            console.error("Map tile failed to load:", event.tile.src);
+            mapError.style.display = "block";
+        });
+
+        tileLayer.on("tileload", function () {
+            mapError.style.display = "none";
+        });
+
+        tileLayer.addTo(map);
+
+        const hospitalMarker = L.marker(
+            [hospitalLat, hospitalLng],
+            { icon: hospitalPin }
+        ).addTo(map).bindPopup(
+            "<b>CareQueue Hospital</b><br>Gandhipuram, Coimbatore<br>" +
+            "<small>GPS: " + hospitalLat.toFixed(6) + ", " +
+            hospitalLng.toFixed(6) + "</small>"
+        );
+
+        const validPatientLocation =
+            typeof patientLat === "number" &&
+            typeof patientLng === "number" &&
+            Number.isFinite(patientLat) &&
+            Number.isFinite(patientLng) &&
+            patientLat >= -90 && patientLat <= 90 &&
+            patientLng >= -180 && patientLng <= 180;
+
+        if (validPatientLocation) {
+            L.marker(
+                [patientLat, patientLng],
+                { icon: patientPin }
+            ).addTo(map).bindPopup(
+                "<b>Your captured GPS location</b><br>" +
+                patientLat.toFixed(6) + ", " + patientLng.toFixed(6)
+            );
+
+            const bounds = L.latLngBounds(
+                [patientLat, patientLng],
+                [hospitalLat, hospitalLng]
+            );
+
+            if (patientLat === hospitalLat && patientLng === hospitalLng) {
+                map.setView([hospitalLat, hospitalLng], 15);
+            } else {
+                map.fitBounds(bounds, {
+                    padding: [35, 35],
+                    maxZoom: 15
+                });
+            }
+
+            document.getElementById("patient-coordinates").textContent =
+                patientLat.toFixed(6) + ", " + patientLng.toFixed(6);
+
+            document.getElementById("patient-location-status").textContent =
+                "GPS coordinates received from the application.";
+        } else {
+            document.getElementById("patient-coordinates").textContent =
+                "Location not captured";
+
+            document.getElementById("patient-location-status").textContent =
+                "No valid GPS coordinates were provided with this booking.";
+
+            hospitalMarker.openPopup();
+        }
+
+        function resizeMap() {
+            if (map) {
+                map.invalidateSize();
+            }
+        }
+
+        window.addEventListener("load", resizeMap);
+        window.addEventListener("resize", resizeMap);
+        setTimeout(resizeMap, 250);
+        setTimeout(resizeMap, 1000);
+
+    } catch (error) {
+        console.error("Map initialization failed:", error);
+        mapError.style.display = "block";
+        mapError.textContent =
+            "The map could not be initialized. Open the browser Console to check the JavaScript error.";
+    }
+})();
+</script>
+</body>
+</html>

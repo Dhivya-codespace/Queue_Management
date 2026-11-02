@@ -1,0 +1,691 @@
+﻿
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Appointment | CareQueue</title>
+
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet"
+          href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background: #587473;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 35px 16px;
+            color: #075e5e;
+        }
+
+        .booking-card {
+            position: relative;
+            width: 100%;
+            max-width: 800px;
+            background: #fff;
+            padding: 32px;
+            border-radius: 16px;
+            box-shadow: 0 18px 45px rgba(0, 0, 0, 0.16);
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 18px;
+            right: 22px;
+            font-size: 28px;
+            color: #777;
+            text-decoration: none;
+        }
+
+        .heading {
+            font-size: 28px;
+            font-weight: 800;
+            margin-bottom: 8px;
+        }
+
+        .subtitle {
+            color: #718080;
+            font-size: 13px;
+            line-height: 1.6;
+            margin-bottom: 24px;
+        }
+
+        .section-title {
+            font-size: 16px;
+            font-weight: 800;
+            margin: 24px 0 14px;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .info-box {
+            background: #edf7f7;
+            border: 1px solid #dce8e8;
+            border-radius: 9px;
+            padding: 14px;
+            min-width: 0;
+        }
+
+        .info-label {
+            display: block;
+            font-size: 10px;
+            color: #718080;
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+            margin-bottom: 7px;
+        }
+
+        .info-value {
+            font-size: 13px;
+            font-weight: 700;
+            color: #075e5e;
+            line-height: 1.5;
+            overflow-wrap: anywhere;
+        }
+
+        .field {
+            margin-bottom: 17px;
+        }
+
+        .field-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        label {
+            display: block;
+            font-size: 12px;
+            font-weight: 700;
+            color: #315f5e;
+            margin-bottom: 8px;
+        }
+
+        input, select {
+            width: 100%;
+            min-height: 44px;
+            padding: 12px;
+            border: 2px solid #dce8e8;
+            border-radius: 7px;
+            background: #fff;
+            color: #193b3b;
+            font-size: 13px;
+            outline: none;
+        }
+
+        input:focus, select:focus {
+            border-color: #087071;
+            box-shadow: 0 0 0 3px rgba(8, 112, 113, 0.09);
+        }
+
+        input[readonly] {
+            background: #f5f9f9;
+        }
+
+        .hint, .map-caption {
+            font-size: 11px;
+            color: #718080;
+            margin-top: 7px;
+            line-height: 1.6;
+        }
+
+        .location-panel {
+            padding: 16px;
+            background: #f1f9f8;
+            border: 1px solid #cfe5e3;
+            border-radius: 10px;
+        }
+
+        .location-row {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 10px;
+        }
+
+        .location-btn {
+            border: none;
+            background: #087071;
+            color: white;
+            border-radius: 7px;
+            padding: 0 16px;
+            min-height: 44px;
+            font-size: 12px;
+            font-weight: 800;
+            cursor: pointer;
+        }
+
+        .location-btn:hover {
+            background: #064f50;
+        }
+
+        .location-btn:disabled {
+            opacity: 0.65;
+            cursor: wait;
+        }
+
+        .location-status {
+            font-size: 12px;
+            margin-top: 10px;
+            line-height: 1.6;
+            color: #315f5e;
+        }
+
+        .location-status.error {
+            color: #a32d2d;
+        }
+
+        .location-status.success {
+            color: #087b53;
+        }
+
+        #patientMap {
+            width: 100%;
+            height: 360px;
+            margin-top: 16px;
+            border: 1px solid #cfe5e3;
+            border-radius: 10px;
+            overflow: hidden;
+            background: #eaf3f2;
+            z-index: 1;
+        }
+
+        .map-link {
+            display: none;
+            margin-top: 12px;
+            color: #086263;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .primary-btn {
+            display: block;
+            width: 100%;
+            border: none;
+            background: #086263;
+            color: white;
+            padding: 15px;
+            border-radius: 7px;
+            margin-top: 23px;
+            font-size: 14px;
+            font-weight: 800;
+            cursor: pointer;
+        }
+
+        .primary-btn:hover {
+            background: #064f50;
+        }
+
+        .error-message {
+            background: #fff0f0;
+            color: #a32d2d;
+            border: 1px solid #f0cccc;
+            border-radius: 6px;
+            padding: 12px;
+            font-size: 12px;
+            margin-bottom: 16px;
+        }
+
+        .footer-text {
+            text-align: center;
+            font-size: 11px;
+            color: #8b9999;
+            margin-top: 20px;
+            line-height: 1.6;
+        }
+
+        @media (max-width: 520px) {
+            .booking-card {
+                padding: 25px 18px;
+            }
+
+            .info-grid, .field-grid {
+                grid-template-columns: 1fr;
+                gap: 10px;
+            }
+
+            .location-row {
+                grid-template-columns: 1fr;
+            }
+
+            #patientMap {
+                height: 280px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+<main class="booking-card">
+
+    <a href="{% url 'patient_symptom' %}"
+       class="close-btn"
+       aria-label="Back to symptoms">&times;</a>
+
+    <h1 class="heading">Book Appointment</h1>
+    <p class="subtitle">
+        Complete your appointment details to continue.
+    </p>
+
+    {% if error %}
+        <div class="error-message">{{ error }}</div>
+    {% endif %}
+
+    <h2 class="section-title">Your Information</h2>
+
+    <div class="info-grid">
+        <div class="info-box">
+            <span class="info-label">Patient Name</span>
+            <div class="info-value">
+                {{ patient_name|default:"Patient" }}
+            </div>
+        </div>
+
+        <div class="info-box">
+            <span class="info-label">Recommended Specialist</span>
+            <div class="info-value">
+                {{ recommended_doctor|default:"General Physician" }}
+            </div>
+        </div>
+
+        <div class="info-box">
+            <span class="info-label">Selected Doctor</span>
+            <div class="info-value">
+                {{ selected_doctor|default:"Dr. Kumar" }}
+            </div>
+        </div>
+
+        <div class="info-box">
+            <span class="info-label">Symptoms</span>
+            <div class="info-value">
+                {{ symptoms|default:"Not provided" }}
+            </div>
+        </div>
+    </div>
+
+    <h2 class="section-title">Appointment Details</h2>
+
+    <form method="POST"
+          action="{% url 'book_appointment' %}"
+          id="bookingForm">
+        {% csrf_token %}
+
+        <div class="field">
+            <label for="patient_name">Patient Name *</label>
+            <input type="text"
+                   id="patient_name"
+                   name="patient_name"
+                   value="{{ patient_name }}"
+                   required>
+        </div>
+
+        <div class="field">
+            <label for="mobile_number">Mobile Number *</label>
+            <input type="tel"
+                   id="mobile_number"
+                   name="mobile_number"
+                   placeholder="Enter 10-digit mobile number"
+                   inputmode="numeric"
+                   pattern="[0-9]{10}"
+                   maxlength="10"
+                   required>
+        </div>
+
+        <div class="field">
+            <label for="doctor">Choose Doctor *</label>
+            <select id="doctor" name="doctor" required>
+                <option value="Dr. Kumar"
+                    {% if selected_doctor == "Dr. Kumar" %}selected{% endif %}>
+                    Dr. Kumar
+                </option>
+                <option value="Dr. Priya"
+                    {% if selected_doctor == "Dr. Priya" %}selected{% endif %}>
+                    Dr. Priya
+                </option>
+            </select>
+        </div>
+
+        <div class="field-grid">
+            <div class="field">
+                <label for="appointment_date">Appointment Date *</label>
+                <input type="date"
+                       id="appointment_date"
+                       name="appointment_date"
+                       required>
+                <p class="hint">Choose today or a future date.</p>
+            </div>
+
+            <div class="field">
+                <label for="appointment_time">Appointment Time *</label>
+                <select id="appointment_time"
+                        name="appointment_time"
+                        required>
+                    <option value="">Select time</option>
+                    <option value="09:00 AM">09:00 AM</option>
+                    <option value="10:00 AM">10:00 AM</option>
+                    <option value="11:00 AM">11:00 AM</option>
+                    <option value="12:00 PM">12:00 PM</option>
+                    <option value="02:00 PM">02:00 PM</option>
+                    <option value="03:00 PM">03:00 PM</option>
+                    <option value="04:00 PM">04:00 PM</option>
+                    <option value="05:00 PM">05:00 PM</option>
+                </select>
+            </div>
+        </div>
+
+        <h2 class="section-title">Patient Location</h2>
+
+        <div class="field location-panel">
+            <label for="location">Current Location</label>
+
+            <div class="location-row">
+                <input type="text"
+                       id="location"
+                       name="location"
+                       value="Gandhipuram, Coimbatore (approximate)"
+                       readonly>
+
+                <button type="button"
+                        class="location-btn"
+                        id="getLocationBtn">
+                    📍 Get My GPS
+                </button>
+            </div>
+
+            <p class="hint">
+                The map initially shows an approximate demo location.
+                Click Get My GPS to request your device's coordinates.
+            </p>
+
+            <p class="location-status"
+               id="locationStatus"
+               aria-live="polite">
+                GPS has not been captured. The displayed demo location
+                is approximate and is not your verified position.
+            </p>
+
+            <a class="map-link"
+               id="mapLink"
+               href="#"
+               target="_blank"
+               rel="noopener noreferrer">
+                Open captured position in Google Maps
+            </a>
+
+            <div id="patientMap"
+                 aria-label="Map showing patient location"></div>
+
+            <p class="map-caption" id="mapCaption">
+                Approximate demo location: Gandhipuram, Coimbatore.
+                Capture GPS to center the map on your device's position.
+            </p>
+        </div>
+
+        <input type="hidden" id="latitude" name="latitude">
+        <input type="hidden" id="longitude" name="longitude">
+        <input type="hidden" name="symptoms" value="{{ symptoms }}">
+
+        <button type="submit" class="primary-btn">
+            Confirm &amp; Book Appointment
+        </button>
+    </form>
+
+    <p class="footer-text">
+        CareQueue · Your appointment details will be processed with care.
+    </p>
+</main>
+
+<!-- Leaflet JavaScript -->
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const dateInput = document.getElementById("appointment_date");
+    const locationButton = document.getElementById("getLocationBtn");
+    const locationInput = document.getElementById("location");
+    const locationStatus = document.getElementById("locationStatus");
+    const latitudeInput = document.getElementById("latitude");
+    const longitudeInput = document.getElementById("longitude");
+    const mapLink = document.getElementById("mapLink");
+    const mapCaption = document.getElementById("mapCaption");
+
+    // Prevent selecting a date in the past.
+    const now = new Date();
+    dateInput.min = [
+        now.getFullYear(),
+        String(now.getMonth() + 1).padStart(2, "0"),
+        String(now.getDate()).padStart(2, "0")
+    ].join("-");
+
+    // Demo location only; not the user's verified GPS location.
+    const demoLatitude = 11.0183;
+    const demoLongitude = 76.9725;
+
+    let patientMap = null;
+    let patientMarker = null;
+
+    function showStatus(message, type) {
+        locationStatus.textContent = message;
+        locationStatus.className = "location-status" +
+            (type ? " " + type : "");
+    }
+
+    // Custom Pin Marker
+    function createLocationPin(text, iconClass, bgColor) {
+        return L.divIcon({
+            className: "custom-map-pin",
+            html: `
+                <div style="
+                    background: ${bgColor || '#087071'};
+                    color: white;
+                    width: 38px;
+                    height: 38px;
+                    border-radius: 50% 50% 50% 0;
+                    transform: rotate(-45deg);
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+                    border: 2px solid white;
+                ">
+                    <i class="${iconClass || 'fa-solid fa-location-dot'}" style="transform: rotate(45deg); font-size: 17px;"></i>
+                </div>
+            `,
+            iconSize: [38, 38],
+            iconAnchor: [19, 38],
+            popupAnchor: [0, -38]
+        });
+    }
+
+    // Initialize the Leaflet map.
+    if (typeof L === "undefined") {
+        showStatus(
+            "Leaflet did not load. Check your internet connection and refresh.",
+            "error"
+        );
+    } else {
+        patientMap = L.map("patientMap").setView(
+            [demoLatitude, demoLongitude],
+            14
+        );
+
+        // Legitimate CartoDB Voyager tiles (powered by OpenStreetMap data)
+        // High-resolution streets, roads, and place labels without 403 access blocks or paid API keys.
+        const cartoLayer = L.tileLayer(
+            "https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png",
+            {
+                maxZoom: 19,
+                subdomains: "abcd",
+                attribution:
+                    '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions" target="_blank" rel="noopener noreferrer">CARTO</a>'
+            }
+        ).addTo(patientMap);
+
+        let bookMapFallback = false;
+        cartoLayer.on("tileerror", function (err) {
+            if (!bookMapFallback) {
+                bookMapFallback = true;
+                L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+                    maxZoom: 19,
+                    subdomains: "abc",
+                    attribution: '&copy; OpenStreetMap contributors'
+                }).addTo(patientMap);
+            }
+        });
+
+        patientMarker = L.marker([
+            demoLatitude,
+            demoLongitude
+        ], {
+            icon: createLocationPin("Demo", "fa-solid fa-location-dot", "#087071")
+        }).addTo(patientMap);
+
+        patientMarker.bindPopup(
+            "<b>Approximate Demo Location</b><br>Gandhipuram, Coimbatore"
+        ).openPopup();
+
+        // Ensure the map renders correctly inside the card.
+        setTimeout(function () {
+            patientMap.invalidateSize();
+        }, 300);
+
+        window.addEventListener("resize", function () {
+            patientMap.invalidateSize();
+        });
+    }
+
+    function updatePatientMap(latitude, longitude) {
+        if (!patientMap || !patientMarker) {
+            showStatus("The map is unavailable. Check the browser console.", "error");
+            return;
+        }
+
+        const position = [latitude, longitude];
+
+        patientMarker.setLatLng(position);
+        patientMarker.setIcon(createLocationPin("GPS", "fa-solid fa-person-circle-check", "#0e86d4"));
+        patientMap.setView(position, 16);
+        patientMarker.bindPopup("<b>Your Captured GPS Position</b>").openPopup();
+
+        mapCaption.textContent =
+            "Map centered on the coordinates captured by your device. " +
+            "GPS accuracy depends on your device and surroundings.";
+
+        setTimeout(function () {
+            patientMap.invalidateSize();
+        }, 100);
+    }
+
+    locationButton.addEventListener("click", function () {
+        if (!navigator.geolocation) {
+            showStatus("Your browser does not support location access.", "error");
+            return;
+        }
+
+        if (!window.isSecureContext) {
+            showStatus(
+                "Location access requires HTTPS or localhost. Run Django on localhost.",
+                "error"
+            );
+            return;
+        }
+
+        locationButton.disabled = true;
+        locationButton.textContent = "Getting GPS...";
+        showStatus("Waiting for location permission and GPS coordinates...", "");
+
+        navigator.geolocation.getCurrentPosition(
+            function (position) {
+                const lat = position.coords.latitude;
+                const lon = position.coords.longitude;
+                const accuracy = position.coords.accuracy;
+
+                latitudeInput.value = lat;
+                longitudeInput.value = lon;
+
+                locationInput.value =
+                    "GPS: " + lat.toFixed(6) + ", " + lon.toFixed(6);
+
+                updatePatientMap(lat, lon);
+
+                mapLink.href =
+                    "https://www.google.com/maps?q=" +
+                    encodeURIComponent(lat + "," + lon);
+
+                mapLink.style.display = "inline-block";
+
+                showStatus(
+                    "GPS captured. Reported accuracy: approximately " +
+                    Math.round(accuracy) + " metres.",
+                    "success"
+                );
+
+                locationButton.disabled = false;
+                locationButton.textContent = "📍 Update GPS";
+            },
+            function (error) {
+                let message;
+
+                if (error.code === 1) {
+                    message =
+                        "Location permission denied. Allow location access in your browser settings.";
+                } else if (error.code === 2) {
+                    message =
+                        "Your device could not determine the location. Check device location settings.";
+                } else if (error.code === 3) {
+                    message = "Location request timed out. Please try again.";
+                } else {
+                    message = "Unable to get your location. Please try again.";
+                }
+
+                showStatus(message, "error");
+                locationButton.disabled = false;
+                locationButton.textContent = "📍 Get My GPS";
+            },
+            {
+                enableHighAccuracy: true,
+                timeout: 20000,
+                maximumAge: 0
+            }
+        );
+    });
+
+    // GPS is optional. Never submit demo coordinates as actual GPS.
+    document.getElementById("bookingForm").addEventListener(
+        "submit",
+        function (event) {
+            const lat = latitudeInput.value;
+            const lon = longitudeInput.value;
+
+            if ((lat && !lon) || (!lat && lon)) {
+                event.preventDefault();
+                showStatus(
+                    "The GPS coordinates are incomplete. Capture your location again.",
+                    "error"
+                );
+            }
+        }
+    );
+});
+</script>
+</body>
+</html>

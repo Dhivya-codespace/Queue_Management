@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Patient Feedback - CareQueue</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: #f2f7f7;
+            font-family: "Inter", Arial, sans-serif;
+            color: #063f43;
+            min-height: 100vh;
+            padding: 40px 20px;
+            display: flex;
+            justify-content: center;
+        }
+        .container {
+            width: 100%;
+            max-width: 960px;
+            background: white;
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 60, 65, 0.08);
+            border: 1px solid #dce8e8;
+        }
+        .header {
+            height: 110px;
+            background: #0b6869;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 35px;
+        }
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        .header-logo {
+            width: 44px;
+            height: 44px;
+            background: rgba(255,255,255,0.15);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+        }
+        .header-title {
+            font-family: "Libre Baskerville", serif;
+            font-size: 22px;
+            font-weight: 700;
+        }
+        .header-subtitle {
+            font-size: 13px;
+            color: #d7eeee;
+            margin-top: 3px;
+        }
+        .content {
+            padding: 35px 35px;
+        }
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        .top-bar h2 {
+            font-size: 20px;
+            color: #063f43;
+        }
+        .btn-back {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: white;
+            color: #075d60;
+            border: 2px solid #087274;
+            padding: 10px 20px;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 700;
+            text-decoration: none;
+            transition: 0.2s;
+        }
+        .btn-back:hover {
+            background: #eef8f7;
+        }
+        .feedback-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+        .feedback-card {
+            background: #fbfdfd;
+            border: 1px solid #dce8e8;
+            border-radius: 14px;
+            padding: 20px 22px;
+            transition: 0.2s;
+        }
+        .feedback-card:hover {
+            border-color: #54c9c5;
+            box-shadow: 0 4px 15px rgba(0, 60, 65, 0.05);
+        }
+        .feedback-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 12px;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .sender-name {
+            font-weight: 700;
+            font-size: 16px;
+            color: #075f60;
+        }
+        .sender-email {
+            font-size: 13px;
+            color: #678082;
+            margin-top: 2px;
+        }
+        .feedback-date {
+            font-size: 12px;
+            color: #8c9fa0;
+            background: #eef5f5;
+            padding: 4px 10px;
+            border-radius: 12px;
+        }
+        .feedback-body {
+            font-size: 14px;
+            line-height: 1.6;
+            color: #173d42;
+            white-space: pre-wrap;
+            background: #ffffff;
+            border: 1px solid #ebf2f2;
+            padding: 14px;
+            border-radius: 8px;
+        }
+        .empty-state {
+            text-align: center;
+            padding: 50px 20px;
+            color: #718485;
+        }
+        .empty-state i {
+            font-size: 45px;
+            color: #b0caca;
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <div class="header-left">
+            <div class="header-logo"><i class="fa-solid fa-comments"></i></div>
+            <div>
+                <div class="header-title">Patient Feedback Messages</div>
+                <div class="header-subtitle">Submitted via CareQueue Contact Page</div>
+            </div>
+        </div>
+        <a href="{% url 'doctor_dashboard' %}" class="btn-back" style="border-color: rgba(255,255,255,0.4); color: white; background: rgba(255,255,255,0.15);">
+            <i class="fa-solid fa-arrow-left"></i> Dashboard
+        </a>
+    </div>
+
+    <div class="content">
+        <div class="top-bar">
+            <h2>Received Messages ({{ feedback_list.count }})</h2>
+            <a href="/admin/hospital/patientfeedback/" target="_blank" class="btn-back">
+                <i class="fa-solid fa-shield"></i> Open in Django Admin
+            </a>
+        </div>
+
+        <div class="feedback-grid">
+            {% for feedback in feedback_list %}
+            <div class="feedback-card">
+                <div class="feedback-header">
+                    <div>
+                        <div class="sender-name">👤 {{ feedback.name }}</div>
+                        <div class="sender-email">✉️ {{ feedback.email }}</div>
+                    </div>
+                    <div class="feedback-date">
+                        🕒 {{ feedback.created_at|date:"M d, Y - h:i A" }}
+                    </div>
+                </div>
+                <div class="feedback-body">{{ feedback.message }}</div>
+            </div>
+            {% empty %}
+            <div class="empty-state">
+                <i class="fa-regular fa-envelope-open"></i>
+                <p>No patient feedback messages received yet.</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,299 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}View My Token — CareQueue{% endblock %}
+
+{% block extra_head %}
+<link rel="stylesheet" href="{% static 'css/queue.css' %}">
+<style>
+    .token-view-container {
+        width: 100%;
+        max-width: 780px;
+        margin: 1rem auto 2.5rem;
+        padding: 0 clamp(0.5rem, 2vw, 1rem);
+    }
+
+    .token-page-top {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 1.5rem;
+        flex-wrap: wrap;
+        gap: 0.75rem;
+    }
+
+    .token-page-top h1 {
+        font-size: clamp(1.4rem, 3vw, 1.85rem);
+        font-weight: 800;
+        color: #064f52;
+        margin: 0;
+        display: flex;
+        align-items: center;
+        gap: 0.6rem;
+    }
+
+    .token-nav-links {
+        display: flex;
+        gap: 0.5rem;
+        flex-wrap: wrap;
+    }
+
+    .token-empty-state {
+        background: #ffffff;
+        border-radius: 16px;
+        border: 2px dashed #d4e5e5;
+        padding: 3.5rem 1.5rem;
+        text-align: center;
+        box-shadow: 0 4px 14px rgba(6, 79, 82, 0.05);
+    }
+
+    .token-empty-icon {
+        width: 76px;
+        height: 76px;
+        background: #e6f5f5;
+        color: #0d7377;
+        border-radius: 50%;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2rem;
+        margin-bottom: 1.25rem;
+    }
+
+    .token-empty-state h2 {
+        font-size: 1.4rem;
+        color: #064f52;
+        font-weight: 700;
+        margin: 0 0 0.5rem;
+    }
+
+    .token-empty-state p {
+        color: #52797b;
+        font-size: 0.95rem;
+        max-width: 440px;
+        margin: 0 auto 1.5rem;
+    }
+
+    .token-badge-large {
+        font-size: 0.82rem;
+        padding: 0.35rem 0.9rem;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="token-view-container">
+
+    <div class="token-page-top no-print">
+        <h1>
+            <i class="fa-solid fa-ticket"></i>
+            Digital Appointment Token
+        </h1>
+        <div class="token-nav-links">
+            <a href="{% url 'patient_dashboard' %}" class="cq-btn cq-btn-outline">
+                <i class="fa-solid fa-gauge-high"></i> Dashboard
+            </a>
+            <a href="{% url 'queue_position' %}" class="cq-btn cq-btn-outline">
+                <i class="fa-solid fa-list-ol"></i> Live Queue
+            </a>
+            <a href="{% url 'appointment_history' %}" class="cq-btn cq-btn-outline">
+                <i class="fa-solid fa-clock-rotate-left"></i> My History
+            </a>
+        </div>
+    </div>
+
+    {% if appointment %}
+    <!-- Printable Token Area -->
+    <div class="printable-token-area">
+        <div class="token-pass-card">
+            
+            <!-- Header -->
+            <div class="token-pass-header">
+                <div class="token-pass-brand">
+                    <i class="fa-solid fa-hospital"></i>
+                    <div>
+                        <h2 class="token-pass-title">CareQueue Smart Hospital</h2>
+                        <p class="token-pass-subtitle">Official Consultation &amp; Queue Pass</p>
+                    </div>
+                </div>
+                <div class="token-pass-tag">
+                    <i class="fa-solid fa-shield-halved"></i> 24/7 Verified
+                </div>
+            </div>
+
+            <!-- Huge Token Number Box -->
+            <div class="token-display-box">
+                <div class="token-label">Current Token Number</div>
+                <div class="token-huge-number">#{{ appointment.token_number }}</div>
+                <div class="token-meta-badges">
+                    {% if appointment.status|lower == 'pending' %}
+                        <span class="cq-badge cq-badge-pending token-badge-large">
+                            <i class="fa-solid fa-clock"></i> Waiting in Queue
+                        </span>
+                    {% elif appointment.status|lower == 'in progress' or appointment.status|lower == 'in consultation' or appointment.status|lower == 'consulting' %}
+                        <span class="cq-badge cq-badge-progress token-badge-large">
+                            <i class="fa-solid fa-stethoscope"></i> In Consultation
+                        </span>
+                    {% elif appointment.status|lower == 'completed' %}
+                        <span class="cq-badge cq-badge-completed token-badge-large">
+                            <i class="fa-solid fa-circle-check"></i> Consultation Completed
+                        </span>
+                    {% else %}
+                        <span class="cq-badge cq-badge-pending token-badge-large">
+                            <i class="fa-solid fa-info-circle"></i> {{ appointment.status }}
+                        </span>
+                    {% endif %}
+
+                    {% if appointment.priority|lower == 'high' %}
+                        <span class="cq-badge cq-badge-high token-badge-large">
+                            <i class="fa-solid fa-bolt"></i> High Priority
+                        </span>
+                    {% elif appointment.priority|lower == 'medium' %}
+                        <span class="cq-badge cq-badge-medium token-badge-large">
+                            <i class="fa-solid fa-triangle-exclamation"></i> Medium Priority
+                        </span>
+                    {% elif appointment.priority|lower == 'low' %}
+                        <span class="cq-badge cq-badge-low token-badge-large">
+                            <i class="fa-solid fa-circle-info"></i> Standard Priority
+                        </span>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Appointment Details Grid -->
+            <div class="token-details-grid">
+                
+                <div class="token-detail-item">
+                    <span class="token-detail-label"><i class="fa-regular fa-user"></i> Patient Name</span>
+                    <span class="token-detail-val highlight">{{ appointment.patient_name }}</span>
+                </div>
+
+                <div class="token-detail-item">
+                    <span class="token-detail-label"><i class="fa-solid fa-hashtag"></i> Appointment ID</span>
+                    <span class="token-detail-val">#{{ appointment.id }}</span>
+                </div>
+
+                <div class="token-detail-item">
+                    <span class="token-detail-label"><i class="fa-solid fa-user-doctor"></i> Assigned Doctor</span>
+                    <span class="token-detail-val highlight">{{ appointment.doctor }}</span>
+                </div>
+
+                <div class="token-detail-item">
+                    <span class="token-detail-label"><i class="fa-solid fa-building-user"></i> Department</span>
+                    <span class="token-detail-val">
+                        {% if "kumar" in appointment.doctor|lower %}
+                            Cardiology / Orthopedics
+                        {% elif "priya" in appointment.doctor|lower %}
+                            General Medicine / Dermatology
+                        {% else %}
+                            Specialist Consultation
+                        {% endif %}
+                    </span>
+                </div>
+
+                <div class="token-detail-item">
+                    <span class="token-detail-label"><i class="fa-regular fa-calendar"></i> Appointment Date</span>
+                    <span class="token-detail-val">{{ appointment.appointment_date|date:"F d, Y" }}</span>
+                </div>
+
+                <div class="token-detail-item">
+                    <span class="token-detail-label"><i class="fa-regular fa-clock"></i> Scheduled Time</span>
+                    <span class="token-detail-val">{{ appointment.appointment_time|time:"h:i A" }}</span>
+                </div>
+
+                <div class="token-detail-item">
+                    <span class="token-detail-label"><i class="fa-solid fa-list-ol"></i> Live Queue Position</span>
+                    <span class="token-detail-val highlight">
+                        {% if queue_position %}
+                            Position {{ queue_position }} in Line
+                        {% elif appointment.status|lower == 'completed' %}
+                            Completed
+                        {% elif appointment.status|lower == 'in progress' %}
+                            Now Serving
+                        {% else %}
+                            Active
+                        {% endif %}
+                    </span>
+                </div>
+
+                <div class="token-detail-item">
+                    <span class="token-detail-label"><i class="fa-solid fa-hourglass-half"></i> Estimated Wait Time</span>
+                    <span class="token-detail-val">
+                        {% if estimated_wait is not None and appointment.status|lower == 'pending' %}
+                            {% if estimated_wait > 0 %}
+                                ~{{ estimated_wait }} Minutes
+                            {% else %}
+                                Next in Line
+                            {% endif %}
+                        {% elif appointment.status|lower == 'completed' %}
+                            None (Completed)
+                        {% else %}
+                            Please check live queue
+                        {% endif %}
+                    </span>
+                </div>
+
+                {% if appointment.created_at %}
+                <div class="token-detail-item">
+                    <span class="token-detail-label"><i class="fa-regular fa-calendar-check"></i> Booked On</span>
+                    <span class="token-detail-val">{{ appointment.created_at|date:"M d, Y h:i A" }}</span>
+                </div>
+                {% endif %}
+
+                {% if appointment.mobile_number %}
+                <div class="token-detail-item">
+                    <span class="token-detail-label"><i class="fa-solid fa-phone"></i> Registered Contact</span>
+                    <span class="token-detail-val">{{ appointment.mobile_number }}</span>
+                </div>
+                {% endif %}
+
+            </div>
+
+            <!-- Footer Notes -->
+            <div class="token-pass-footer">
+                <i class="fa-solid fa-circle-info"></i>
+                <div>
+                    <strong>Patient Advisory:</strong> Please arrive 15 minutes before your scheduled slot. Present this digital token pass at the OPD reception or doctor's desk.
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Actions Bar (Hidden during Print) -->
+    <div class="token-actions-bar no-print">
+        <button type="button" onclick="window.print()" class="cq-btn cq-btn-print">
+            <i class="fa-solid fa-print"></i> Print Token Pass
+        </button>
+        <a href="{% url 'queue_position' %}" class="cq-btn cq-btn-primary">
+            <i class="fa-solid fa-list-ol"></i> Live Queue Position
+        </a>
+        <a href="{% url 'appointment_history' %}" class="cq-btn cq-btn-outline">
+            <i class="fa-solid fa-clock-rotate-left"></i> View History
+        </a>
+        <a href="{% url 'patient_dashboard' %}" class="cq-btn cq-btn-outline">
+            <i class="fa-solid fa-house"></i> Dashboard
+        </a>
+    </div>
+
+    {% else %}
+    <!-- Friendly Empty State -->
+    <div class="token-empty-state">
+        <div class="token-empty-icon">
+            <i class="fa-solid fa-ticket-simple"></i>
+        </div>
+        <h2>No Active Appointment Token</h2>
+        <p>You do not currently have an active appointment or issued token. Book an appointment now to receive your digital token pass.</p>
+        <div style="display: flex; gap: 0.75rem; justify-content: center; flex-wrap: wrap;">
+            <a href="{% url 'book_appointment' %}" class="cq-btn cq-btn-primary">
+                <i class="fa-solid fa-calendar-plus"></i> Book Appointment Now
+            </a>
+            <a href="{% url 'patient_dashboard' %}" class="cq-btn cq-btn-outline">
+                <i class="fa-solid fa-house"></i> Back to Dashboard
+            </a>
+        </div>
+    </div>
+    {% endif %}
+
+</div>
+{% endblock %}
